@@ -1,0 +1,138 @@
+/*
+ * Build using modified BEM (block-element-modifier)
+ * So an ex. of mod BEM is btn-modal-lg, or btn-lg
+ */
+
+/*
+.columns {
+	border: 1px solid black;
+}
+*/
+
+/* general style/themes */
+
+p, h1, h2, h3, h4, h5, h6 {
+	color: #424242;
+}
+
+a {
+	color: #6699cc;
+	text-decoration: none;
+}
+
+li {
+	padding: none;
+	margin: none;
+}
+
+html {
+	background-color: #fefefe;
+}
+
+.notable {
+	color: #cc6600;
+}
+
+/* image header */
+
+.header-img {
+	width: 100%;
+	overflow-y: hidden;
+}
+
+.personal-picture-wrapper {
+	width: 100%;
+	overflow: visible;
+}
+
+.personal-picture {
+/*
+	position: relative;
+	top: -30px;
+*/
+	margin: 1rem auto;
+	display: block;
+	width: 120px;
+	height: 120px;
+	border-radius: 100%;
+	overflow: hidden;
+	float: center;
+	box-shadow: -2px 0 10px #888;
+}
+
+/*  footer  */
+
+.footer-wrapper {
+	background-color: #fafafa;
+	box-sizing: border-box;
+	padding: 3rem 0;
+	text-align: center;
+}
+
+.footer-copyright {
+	font-weight: bold;
+}
+
+.footer-container {
+	margin-bottom: 1rem;
+}
+
+/*  content-wrapper notation  */
+
+.content-wrapper {
+	box-sizing: border-box;
+	padding: 2em;
+	margin-bottom: 4rem;
+	background-color: #fafafa;
+}
+
+.content-header {
+	margin-bottom: 2em;
+}
+
+.content-title, .content-subtitle {
+	color: #424242;
+	margin: 0;
+	padding: 0;
+}
+
+.content-body {
+	margin-bottom: 2em;
+	padding: 0;
+	color: #424242;
+}
+
+.content-body li {
+	margin-bottom: 0px;
+	padding: 0px;
+	list-style: none;
+}
+
+.content-body lh {
+	font-weight: bold;
+}
+
+.content-footer {
+	margin: 0;
+	padding: 0;
+	text-align: right;
+}
+
+.content-footer-dates {
+	font-size: .8em;
+	font-family: monospace;
+}
+
+/*  subject colors  */
+
+.job {
+	color: #73d4ff;
+}
+
+.project {
+	color: #ffc55b;
+}
+
+.skill {
+	color: greenyellow;
+}
