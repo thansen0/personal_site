@@ -45,11 +45,19 @@ html {
 	overflow: visible;
 }
 
+/*  Blog link near header  */
+
+.content-center-button {
+	width: 100%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.content-center-button button {
+	margin: 0 auto;
+}
+
 .personal-picture {
-/*
-	position: relative;
-	top: -30px;
-*/
 	margin: 1rem auto;
 	display: block;
 	width: 120px;
