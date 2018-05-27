@@ -120,6 +120,18 @@ html {
 	font-weight: bold;
 }
 
+.reading-content-style p {
+	font-size: 1.3em;
+}
+
+.reading-content-style p {
+	margin-bottom: 3em;
+}
+
+.reading-content-style {
+	padding: 3em;
+}
+
 .content-footer {
 	margin: 0;
 	padding: 0;
@@ -129,6 +141,12 @@ html {
 .content-footer-dates {
 	font-size: .8em;
 	font-family: monospace;
+}
+
+.image-caption {
+	font-size: .8em;
+	margin-top: .4em;
+	margin-bottom: .8em;
 }
 
 /*  subject colors  */
@@ -142,5 +160,15 @@ html {
 }
 
 .skill {
-	color: greenyellow;
+	color: #58bf00;
+}
+
+.analysis {
+	color: rgba(178, 82, 0, 0.74);
+}
+
+.quote {
+	font-style: italic;
+	width: 80%;
+	margin: 0 auto;
 }
