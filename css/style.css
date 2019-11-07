@@ -3,12 +3,6 @@
  * So an ex. of mod BEM is btn-modal-lg, or btn-lg
  */
 
-/*
-.columns {
-	border: 1px solid black;
-}
-*/
-
 /* general style/themes */
 
 p, h1, h2, h3, h4, h5, h6 {
@@ -68,6 +62,18 @@ html {
 	box-shadow: -2px 0 10px #888;
 }
 
+/*  additional table styleing  */
+
+
+.center-table {
+	margin: auto;
+	margin-bottom: 1em;
+}
+
+.center-table * {
+	text-align: center;
+}
+
 /*  footer  */
 
 .footer-wrapper {
@@ -105,7 +111,6 @@ html {
 }
 
 .content-body {
-	margin-bottom: 2em;
 	padding: 0;
 	color: #424242;
 }
@@ -124,12 +129,12 @@ html {
 	font-size: 1.3em;
 }
 
-.reading-content-style p {
-	margin-bottom: 3em;
+.reading-content-style > p {
+	margin-bottom: 2em;
 }
 
 .reading-content-style {
-	padding: 3em;
+	padding: 2.5em 3em;
 }
 
 .content-footer {
@@ -149,22 +154,56 @@ html {
 	margin-bottom: .8em;
 }
 
+.full-image-wrapper {
+	margin: auto;
+	width: 85%;
+}
+
+@media (max-width: 750px) {
+	.full-image-wrapper {
+		margin: auto;
+		margin-bottom: 2em;
+		width: 100%;
+	}
+}
+
+.image-wrapper {
+	margin: 0 auto;
+	width: 40%;
+}
+
 /*  subject colors  */
 
 .job {
 	color: #73d4ff;
 }
 
+.job:hover:after {
+	content: ' (Job)';
+}
+
 .project {
 	color: #ffc55b;
+}
+
+.project:hover:after {
+	content: ' (Project)';
 }
 
 .skill {
 	color: #58bf00;
 }
 
+.skill:hover:after {
+	content: ' (Skill)';
+}
+
 .analysis {
 	color: rgba(178, 82, 0, 0.74);
+}
+
+.analysis:hover:after {
+	content: ' (Analysis)';
 }
 
 .quote {
@@ -172,3 +211,4 @@ html {
 	width: 80%;
 	margin: 0 auto;
 }
+

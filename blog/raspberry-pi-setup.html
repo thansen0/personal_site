@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Thomas Hansen - Developer, Engineer</title>
+  <meta name="author" content="Thomas Hansen">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="../css/normalize.css">
+  <link rel="stylesheet" href="../css/skeleton.css">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="../img/favicon.ico">
+	
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119980505-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-119980505-1');
+	</script>
+
+</head>
+<body>
+	
+	<!--  Title content of site  -->
+	<div class="container">
+		<div class="row">
+			<div class="content-page-header ten columns">
+				<h1>Setting up Raspbian without an external monitor or keyboard</h1>
+				<h6>By Thomas Hansen</h6>
+			</div>
+		</div>
+		
+		<!--	Story content	-->
+		<div class="content-wrapper">
+			<div class="row content-body">
+				<div class="twelve columns reading-content-style">
+					
+					<p>Recently I had to set up a raspberry pi without using a monitor and keyboard like they recommend. A few parts of the process felt unintuitive so I figured I’d write a short guide for setting up the pi using a direct ethernet connection and no external monitor/keyboard/mouse. Here’s what you’ll need:</p>
+					
+					<ul>
+						<li>Raspberry pi</li>
+						<li>Computer (mac for this guide)</li>
+						<li>Ethernet cable (and adaptor if necessary)</li>
+						<li>SD card (and adaptor)</li>
+						<li>Micro usb cable</li>
+					</ul>
+	
+					<p>I won’t dwell on the initial setup too much but you’ll first need to flash the .img file onto your SD card to plug into the raspberry pi. You can download Raspbian from the official raspberry pi site here (<a href="https://www.raspberrypi.org/downloads/raspbian/" target="_blank">https://www.raspberrypi.org/downloads/raspbian/</a>). You will only need the lite to log on with ssh however to use the desktop you’ll have to at least download Raspbian Stretch with desktop. From here, you will need to plug your SD card into your computer and use the Disk Utility (or Etcher which is a little more intuitive, <a href="https://www.balena.io/etcher" target="_blank">https://www.balena.io/etcher/</a>) to flash the .img file onto your SD card. You may have to wait a while, as this takes a few minutes.</p>
+
+					<p>Once this is done you will not want to eject just yet, as SSH is disabled by default by the Raspbian community for security reasons. Normally you’d log on with a monitor to enable it, but here we’ll be going into the drive to add an empty file called ssh. In this example, my SD card is named “boot”. You’ll type the following commands into your terminal:</p>
+
+<pre>
+<code>$ cd /Volumes/boot/
+$ touch ssh</code>
+</pre>
+
+					<p>And that’s it; you can eject the card and plug it into your raspberry pi.</p>
+
+					<p>In this example we’ll be powering the raspberry pi through the micro usb cable, and connecting with internet through the Ethernet cable.</p>
+
+					<p>To set up the Ethernet connection, you’ll want to open the system preferences and go into Sharing. In Internet sharing you’ll want to make sure thunderbolt Ethernet is checked. I have a 2013 macbook pro, depend on the model yours may just say Ethernet port or Ethernet through usb-c.</p>
+					
+					<div class="row">
+						<img class="twelve columns" src="../img/rasp-pi/network-sharing-settings.png"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns"></div>
+						<div class="two columns"></div>
+					</div>
+
+					<p>From here you’ll go back to system preferences and open up Network. Select Thunderbolt Ethernet and make sure IPv4 is on automatic. If you have a static IP address, you can change it to DHCP manual and set an address, and then it’ll set the subnet mask for you automatically.</p>
+
+					<p>Now you can plug in the Ethernet cable into your pi, and connect the micro usb to the pi as well. You should see the light turn from red to yellow on the Networks tab, and it should choose a host address and a subnet mask.</p>
+					
+					<div class="row">
+						<img class="twelve columns" src="../img/rasp-pi/network-settings.png"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns"></div>
+						<div class="two columns"></div>
+					</div>
+
+					<p>Now you’ll need your pi’s IP address. To get this you can use a few different methods. The easiest way is just to use the alias raspberrypi.local, which will act as the IP address. So for example if you typed in <code>ping –c 4 raspberrypi.local</code> it would ping the raspberry pi and it would show you the IP address. You may also enter ifconfig into your terminal, and the address will be under en_ and won’t be the host address. Lastly you can use <code>\nmap –sn IP-addr/CIDR</code> to list all the devices on that IP address with that mask. So in my case I would type in <code>nmap –sn 169.254.1.1/16</code>, or if you had a subnet mask of 255.255.255.0 you could use <code>nmap –sn 169.254.249.1/24.</code></p>
+
+					<div class="row">
+						<img class="twelve columns" src="../img/rasp-pi/ping-pi.png"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns"></div>
+						<div class="two columns"></div>
+					</div>
+
+					<p>In my case I had an address of 169.254.156.185, so I simply ran <code>ssh pi@169.254.156.185</code> and used the default password raspberry to log into the pi. From here you've ssh'd in, and you can leave the session by simply typing <code>exit</code> and hitting enter.</p>
+
+					<div class="row">
+						<img class="twelve columns" src="../img/rasp-pi/ssh-into-pi.png"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns"></div>
+						<div class="two columns"></div>
+					</div>
+
+					<p>So that’s it; you may go from there, but you won’t be able to get access to the internet outside of the pi. To connect, I’d recommend this excellent guide here (<a href="http://www.circuitbasics.com/raspberry-pi-wifi-installing-wifi-dongle/" target="_blank">http://www.circuitbasics.com/raspberry-pi-wifi-installing-wifi-dongle/</a>).</p>
+					
+				</div>
+			</div>
+			<div class="row content-footer">
+				<div class="content-footer-dates">03-30-2019</div>
+			</div>
+		</div>
+	
+		<!--	Blog link	-->
+		<div class="content-wrapper">
+			<div class="row content-center-button">
+				<a href="../blog.html" class="button">Article List</a>
+			</div>
+		</div>
+		
+	</div>
+	
+	<!--  footer  -->
+	<div class="container footer-container">
+		<div class="footer-wrapper">
+			<div class="row">
+				<div class="three columns">&nbsp;
+				</div>
+				<div class="six columns">
+					<div class="footer-line">Thomas Hansen</div>
+					<div class="footer-line">Built using AWS and Skeleton.</div>
+					<div class="footer-line">Please contact me on my <a href="https://www.linkedin.com/in/thomas-hansen-60b83210b/">linkedin</a> if you have any questions or want to get in contact with me.</div>
+					<div class="footer-copyright">Copyright 2019</div>
+				</div>
+				<div class="three columns">&nbsp;
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

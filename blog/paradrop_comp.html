@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Thomas Hansen - Developer, Engineer</title>
+  <meta name="author" content="Thomas Hansen">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="../css/normalize.css">
+  <link rel="stylesheet" href="../css/skeleton.css">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="../img/favicon.ico">
+	
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119980505-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-119980505-1');
+	</script>
+
+</head>
+<body>
+	
+	<!--  Title content of site  -->
+	<div class="container">
+		<div class="row">
+			<div class="content-page-header ten columns">
+				<h1>The Paradrop Gigabit Challenge and my Project</h1>
+				<h6>By Thomas Hansen</h6>
+			</div>
+		</div>
+		
+		<!--	Story content	-->
+		<div class="content-wrapper">
+			<div class="row content-body">
+				<div class="twelve columns reading-content-style">
+					<p>A little while ago I joined a competition called the <a href="https://paradrop.org/gigabit-challenge-2018" target="_blank">Paradrop Gigibite challenge</a>, and while I’ve been working on I wanted to highlight what I thought were interesting features of both Paradrop and my project in particular.</p>
+					
+					<p>Located in the UW-Madison CS department headed by Dr. Suman, Lance, and other graduate students is the home of Paradrop. The fundamental idea is to move edge computing, or computation done at the “edge” of a network instead of at a central server, to a piece of shared hardware in the consumers home. The piece of hardware they’ve chosen is the consumers router, and this provides a lot of possibilities to third parties. In theory it means Netflix could cache the next show in a series on your router during non-peak hours. Internet of things devices could run heavy computations on your router instead of their onboard hardware, and security cameras could filter out unnecessary footage before sending the rest up to the server, without having to have an onboard computational circuits.</p>
+					
+					<p>The way it works is simple. After installing Paradrop on your router, 3rd parties can create a  “chute”. This chute is where they will run their software, and they will be able to do anything from add devices to the routing table to cache files; in the future Paradrop is planning to be able to send messages and update devices not within the routers network as well.</p>
+					
+					<p>I think there are a lot of possibilities with Paradrop, but I believe the best proposition is with IoTs devices. Currently a large problem with these devices is the circuitry and chips add too much cost to the overall device. People aren’t willing to pay <a target="_blank" href="https://www.cnet.com/products/pantelligent/review/">$200 for a pan</a> that lets them know when to stir their food or when it’s done. But by using Paradrop, we’ll hopefully be able to move most of this computation onto the router and away from the device. This way consumers will just pay for cheap WiFi antennas and small batteries, not larger chips and other computational circuitry.</p>
+					
+					<p>This plays out well in the project I’m working on now. The ultimate goal is to have a small camera above a stove taking photos and watching as the dish is cooked. From here there will be a temperature probe in the pan feeding additional information into the chute on the router. As I continue down this path, I expect to encounter problems and possibly remove and change features, however I want to stay true to the intention of the project, that being keeping the cost of the devices low by not doing computations on the IoT device.</p>
+					
+					<p>I believe theirs a rich future beyond just cooking and IoT devices as well. Routers really are the last device not to start becoming smarter, and if we begin expecting more from our routers with Paradrop it’s likely we’ll see other advances as well. Devices could include microphones for voice control without having to include their own hardware like an amazon echo. We could run machine learning and predictive software for our smart devices on them, and block ads before they even get to our phones. I’m excited for their future, and hopeful for my project in the competition.</p>
+					
+				</div>
+			</div>
+			<div class="row content-footer">
+				<div class="content-footer-dates">06-01-2018</div>
+			</div>
+		</div>
+	
+		<!--	Blog link	-->
+		<div class="content-wrapper">
+			<div class="row content-center-button">
+				<a href="../blog.html" class="button">Article List</a>
+			</div>
+		</div>
+		
+	</div>
+	
+	<!--  footer  -->
+	<div class="container footer-container">
+		<div class="footer-wrapper">
+			<div class="row">
+				<div class="three columns">&nbsp;
+				</div>
+				<div class="six columns">
+					<div class="footer-line">Thomas Hansen</div>
+					<div class="footer-line">Built using AWS and Skeleton.</div>
+					<div class="footer-line">Please contact me on my <a href="https://www.linkedin.com/in/thomas-hansen-60b83210b/">linkedin</a> if you have any questions or want to get in contact with me.</div>
+					<div class="footer-copyright">Copyright 2018</div>
+				</div>
+				<div class="three columns">&nbsp;
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

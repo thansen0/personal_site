@@ -7,6 +7,7 @@
   <meta charset="utf-8">
   <title>Thomas Hansen - Developer, Engineer</title>
   <meta name="author" content="Thomas Hansen">
+  <meta content="Welcome to my personal site and blog!" name="description">
 
   <!-- Mobile Specific Metas
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -25,6 +26,16 @@
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="icon" type="image/png" href="img/favicon.ico">
+	
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119980505-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-119980505-1');
+	</script>
 
 </head>
 <body>
@@ -80,6 +91,34 @@
 			</div>
 		</div>
 		
+		<!--	Autonomous car	-->
+		<div class="content-wrapper">
+			<div class="row content-header">
+				<div class="twelve columns">
+					<h3 class="content-title">Autonomous Car Communications paper for ECE707</h3>
+					<h6 class="content-subtitle project">Course Project</h6>
+				</div>
+			</div>
+			<div class="row content-body">
+				<div class="eight columns">
+					<p>This was a <a href="deps/707_Proposal.pdf">paper</a> a partner and myself wrote for our ECE707 course, where we created a system for cars to communicate using the ultrasonic speakers already on the cars. The purpose of the system is to act like a more advanced blinker, where nearby cars will get messages about basic intents of the cars nearby, similar to turn signals, but with more advanced functionality.</p>
+				</div>
+				<div class="four columns">
+					<ul>
+						<lh class="content-ul-title">Skills used:</lh>
+						<li>Signal Processing</li>
+						<li>STFT/FFT</li>
+						<li>Ultrasonic Communication</li>
+						<li>Matlab</li>
+						<li>Audio Processing</li>
+					</ul>
+				</div>
+			</div>
+			<div class="row content-footer">
+				<div class="content-footer-dates">Late 2018</div>
+			</div>
+		</div>
+		
 		<!--	Sentry Insurance Position	-->
 		<div class="content-wrapper">
 			<div class="row content-header">
@@ -103,36 +142,9 @@
 				</div>
 			</div>
 			<div class="row content-footer">
-				<div class="content-footer-dates">From 5-2018 to today</div>
+				<div class="content-footer-dates">From 5-2018 to 2-2019</div>
 			</div>
 		</div>
-		
-		<!--	Epub Compiler and stack	-->
-		<div class="content-wrapper">
-			<div class="row content-header">
-				<div class="twelve columns">
-					<h3 class="content-title">Epub Compiler and stack</h3>
-					<h6 class="content-subtitle project">Personal project</h6>
-				</div>
-			</div>
-			<div class="row content-body">
-				<div class="eight columns">
-					<p>There are three parts to this project. Originally I wrote a Java compiler to take a number of text files and convert them into a readable .epub file, which is availiable on my github <a href="https://github.com/Haxonek/EBookCompiler">here</a>. Later I wrote <a href="https://haxonek.github.io/Building-an-epub-file/">a site</a> to help guide you through the process of developing an epub file and what are in the contents of it. Finally I plan to build a full markup language to compile the markup into an epub file, however I haven't finished the compiler yet. The previous two projects are available on my github if you'd like to view them.</p>
-				</div>
-				<div class="four columns">
-					<ul>
-						<lh class="content-ul-title">Skills used:</lh>
-						<li>.epub file knowledge</li>
-						<li>Text parsing</li>
-						<li>Java</li>
-					</ul>
-				</div>
-			</div>
-			<div class="row content-footer">
-				<div class="content-footer-dates">From 12-2016 to today</div>
-			</div>
-		</div>
-		
 		
 		<!--	Julia/Optimization project 	-->
 		<div class="content-wrapper">
@@ -193,6 +205,89 @@
 			</div>
 		</div>
 		
+		<!--	Security ECE 537	-->
+		<div class="content-wrapper">
+			<div class="row content-header">
+				<div class="twelve columns">
+					<h3 class="content-title">A look into Security Issues in P2P Networks</h3>
+					<h6 class="content-subtitle project">Class project, ECE537 at UW-Madison</h6>
+				</div>
+			</div>
+			<div class="row content-body">
+				<div class="eight columns">
+					<p>We wrote a paper based off what we precieved as some of the most significant security threats to peer-to-peer networks, which included both traditional P2P networks such as torrent as well as more recent networks such as blockchains. This was written my sophomore year in college.</p>
+					<p>You may view our <a href="deps/ECE537_Final_Paper.pdf">final paper here</a>.</p>
+				</div>
+				<div class="four columns">
+					<ul>
+						<lh class="content-ul-title">Skills used:</lh>
+						<li>P2P Networks</li>
+						<li>DDoS/DoS</li>
+						<li>Network Security</li>
+					</ul>
+				</div>
+			</div>
+			<div class="row content-footer">
+				<div class="content-footer-dates">From 03-2017 to 04-2017</div>
+			</div>
+		</div>
+		
+		<!--	Machine learning (ECE532) project 	-->
+		<div class="content-wrapper">
+			<div class="row content-header">
+				<div class="twelve columns">
+					<h3 class="content-title">Spooky Author NLP and LSR</h3>
+					<h6 class="content-subtitle project">Class project, CS532 at UW-Madison</h6>
+				</div>
+			</div>
+			<div class="row content-body">
+				<div class="eight columns">
+					<p>My Junior year of college I took a machine learning course where we wrote a project in Matlab that tried to identify different horror authors based on their style of writing. It was based off a dataset from the <a target="_blank" href="http://www.kaggle.com/c/spooky-author-identification">Kaggle Spooky Author Identification compeition</a>. Here we used Natral Language Processing (NLP) and different linear regression models to try and identify which author wrote which piece of writing.</p>
+					
+					<p>You can view <a href="deps/spookyNLP.pdf">the project here</a>.</p>
+				</div>
+				<div class="four columns">
+					<ul>
+						<lh class="content-ul-title">Skills used:</lh>
+						<li>Machine Learning</li>
+						<li>Matlab</li>
+						<li>Natural Language Processing</li>
+						<li>Linear Algebra</li>
+						<li>Regression Models</li>
+					</ul>
+				</div>
+			</div>
+			<div class="row content-footer">
+				<div class="content-footer-dates">11-2017</div>
+			</div>
+		</div>
+		
+		<!--	Epub Compiler and stack	-->
+		<div class="content-wrapper">
+			<div class="row content-header">
+				<div class="twelve columns">
+					<h3 class="content-title">Epub Compiler and stack</h3>
+					<h6 class="content-subtitle project">Personal project</h6>
+				</div>
+			</div>
+			<div class="row content-body">
+				<div class="eight columns">
+					<p>There are three parts to this project. Originally I wrote a Java compiler to take a number of text files and convert them into a readable .epub file, which is availiable on my github <a href="https://github.com/Haxonek/EBookCompiler">here</a>. Later I wrote <a href="https://haxonek.github.io/Building-an-epub-file/">a site</a> to help guide you through the process of developing an epub file and what are in the contents of it. Finally I plan to build a full markup language to compile the markup into an epub file, however I haven't finished the compiler yet. The previous two projects are available on my github if you'd like to view them.</p>
+				</div>
+				<div class="four columns">
+					<ul>
+						<lh class="content-ul-title">Skills used:</lh>
+						<li>.epub file knowledge</li>
+						<li>Text parsing</li>
+						<li>Java</li>
+					</ul>
+				</div>
+			</div>
+			<div class="row content-footer">
+				<div class="content-footer-dates">From 12-2016 to 01-2017</div>
+			</div>
+		</div>
+		
 		
 		<!--	Libpre; an image hosting site using AWS	-->
 		<div class="content-wrapper">
@@ -232,7 +327,7 @@
 					<div class="footer-line">Thomas Hansen</div>
 					<div class="footer-line">Built using AWS and Skeleton.</div>
 					<div class="footer-line">Please contact me on my <a href="https://www.linkedin.com/in/thomas-hansen-60b83210b/">linkedin</a> if you have any questions or want to get in contact with me.</div>
-					<div class="footer-copyright">Copyright 2018</div>
+					<div class="footer-copyright">Copyright 2019</div>
 				</div>
 				<div class="three columns">&nbsp;
 				</div>
