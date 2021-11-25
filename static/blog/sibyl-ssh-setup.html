@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Thomas Hansen - Developer, Engineer</title>
+  <meta name="author" content="Thomas Hansen">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="../css/normalize.css">
+  <link rel="stylesheet" href="../css/skeleton.css">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="../img/favicon.ico">
+	
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119980505-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-119980505-1');
+	</script>
+
+</head>
+<body>
+	
+	<!--  Title content of site  -->
+	<div class="container">
+		<div class="row">
+			<div class="content-page-header ten columns">
+				<h1>Setting up Sibyl VPS and SSH</h1>
+				<h6>By Thomas Hansen</h6>
+			</div>
+		</div>
+		
+		<!--	Story content	-->
+		<div class="content-wrapper">
+			<div class="row content-body">
+				<div class="twelve columns reading-content-style">
+					
+					<p>Recently I've been moving all my content off AWS and onto Sibyl, and since there were no guides to setting this up (and I've encountered some bugs) I figured I'd create one so you know what you're getting yourself into before you have to pay. It's not much work, but it does take some setup.</p>
+					
+					<h3>Setting up Sibyl</h3>
+					
+					<p>First you have to set up an account, and I recommend actually doing this first. Second you'll have to order the service. Currently they have two options, <a href="https://sibyl.li/store/norway-bunker-vps">Norway</a> and <a href="https://sibyl.li/store/nl-vps-10g">NL</a> bunker, but I think they're making a third in the UK. You'll want to switch currency to USD. Sibyl doesn't have US based servers for legal reasons relating to privacy, so if the ping rate is important to you it might ultimately make more sense to use Vultr, although for what I've been doing it hasn't been a problem. From here it'll have you create a host/machine name as well.</p>
+					
+					<p>From here Sibyl will email you a generated username, password, and the link <a href="https://vps.sibyl.li/login.php">vps.sibyl.li</a> to log in with. You'll enter the given username/password. I'd probably give it a bit to propagate, but if it's not letting you log in just contact they're support for a new password. This happened to me and they respond remarkably quickly. Once you log in the page should look like this</p>
+					
+					<div class="row">
+						<img class="twelve columns" src="../img/sibyl/sibyl_vps_selection.jpg"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns"></div>
+						<div class="two columns"></div>
+					</div>
+					
+					<p>You should only see one service, and it shouldn't have an OS selected yet. Select it, and it'll dump you into your homepage, which looks like this:</p>
+					
+					<div class="row">
+						<img class="twelve columns" src="../img/sibyl/sibyl_homepage.jpg"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns"></div>
+						<div class="two columns"></div>
+					</div>
+					
+					<p>Now you'll want to install the OS. These are the options they currently have, but it may be different in the future. After installing <b>it will give you your root password</b>. If you do lose you can just regenerate it from the "Root/Admin Password" option on the homepage.</p>
+					
+					<div class="row">
+						<img class="twelve columns" src="../img/sibyl/sibyl_OS_options.jpg"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns"></div>
+						<div class="two columns"></div>
+					</div>
+					
+					<p>Once you have your OS installed and root password, you'll have to open the VNC and log in as root. If you user their VNC it'll tell you the port, username and password they're using for VNC and an option to open it in html or Java. *Technically* you're done here, but realistically you need SSH access too.</p>
+					
+					<h3>SSH Setup on linux/macOS/Possibly powershell</h3>
+					
+					<p>If you set up your server with Ubuntu, you'll have to first run these commands to install ssh, ufw (firewall) and enable them.</p>
+					
+					<pre><code>$ sudo apt install ssh ufw
+$ sudo systemctl enable --now ssh
+$ sudo systemctl status ssh # ensure the service is actually running
+$ sudo ufw allow ssh</code></pre>
+					
+					<p><code>systemctl status ssh</code> just ensures that the service is enabled, and <code>ufw allow ssh</code> opens the ssh port for use.</p>
+
+					<p>The secure thing to do now is disable ssh through root and use another account. There are many scripts that scan IP's and try common passwords for root users (the research on it is crazy, you can scan every IPv4 address in ~45minutes) but given my secure password and the low importance of this server I won't be doing that.</p>
+					
+					<p>Now you should be able to log in from your home computer with</p>
+					
+					<pre><code>$ ssh root@IP-address</code></pre>
+					
+					<p>But that's a pain. You can set up your ssh config to automatically enter that information in your <code>.ssh/config</code> file. Mine looks something like this:</p>
+					
+					<pre><code>ForwardX11 yes
+
+Host name-you-choose
+    Hostname ip-address
+    User root</code></pre>
+					
+					<p>But now what if you don't want to have to enter that randomly generated password over and over again?</p>
+					
+					<h3>SSH key gen</h3>
+					
+					<p>The best way is to use ssh-keygen to avoid entering password. You <b>will have to log into your server at least once</b> with the normal password to generate the inital keys.</p>
+					
+					<p>Generate a key by running <code>ssh-keygen</code> on your machine to generate the RSA keypair. You can just hit enter for the file to save the keypair if you'd like to use the default, and you may leave the passphrase blank (unless you want to have one that's easy to remember on your local machine).</p>
+					
+					<p>Then run</p>
+					
+					<pre><code>$ ssh-copy-id root@ip-address</code></pre>
+					
+					<p>or</p>
+					
+					<pre><code>$ ssh-copy-id host-in-ssh-config</code></pre>
+					
+					<p>If you set up your .ssh config file.</p>
+					
+					<p>Now you should be able to run <code>$ ssh host-in-ssh-config</code> and it should log you directly in!</p>
+				
+					<h3>Extras</h3>
+					
+					<p>Two commands that are great for checking system resources (since you don't have that many):</p>
+					
+					<ul>
+						<li><code>dh -f</code></li>
+						<li> - This will show you how much space you have left</li>
+						<li><code>htop</code></li>
+						<li> - shows you CPU usage and RAM.</li>
+						<li><code>hostname -i</code></li>
+						<li> - will show you your ip address</li>
+					</ul>
+					
+					<p>Also if you want to set up a git server, I'd recommend this guide by Luke Smith, where he's also installing it on a Sibyl VPS: <a href="https://odysee.com/@Luke:7/setting-up-your-own-git-server:d">Setting up *Your Own* Git Server</a>. Other fun services to host include searx or a matrix server.</p>
+					
+					<p>Additionally you can forward a domain to this IP address if you'd like, as I've done for this site. I like <a href="https://www.epik.com/">Epik</a>, but generally you can set it to the default name servers and enter your IP address in advanced forwarding for any domain registrar.</p>
+					
+				</div>
+			</div>
+			<div class="row content-footer">
+				<div class="content-footer-dates">11-25-2021</div>
+			</div>
+		</div>
+	
+		<!--	Blog link	-->
+		<div class="content-wrapper">
+			<div class="row content-center-button">
+				<a href="../blog.html" class="button">Article List</a>
+			</div>
+		</div>
+		
+	</div>
+	
+	<!--  footer  -->
+	<div class="container footer-container">
+		<div class="footer-wrapper">
+			<div class="row">
+				<div class="three columns">&nbsp;
+				</div>
+				<div class="six columns">
+					<div class="footer-line">Thomas Hansen</div>
+					<div class="footer-line">Built using Sibyl and Skeleton.</div>
+					<div class="footer-line">You may contact me on my <a href="https://www.linkedin.com/in/thomas-hansen-60b83210b/">linkedin</a>.</div>
+					<div class="footer-copyright">Copyright 2021</div>
+				</div>
+				<div class="three columns">&nbsp;
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
