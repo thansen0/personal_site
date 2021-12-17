@@ -100,7 +100,7 @@ $ touch ssh</code>
 						<div class="two columns"></div>
 					</div>
 
-					<p>Now you’ll need your pi’s IP address. To get this you can use a few different methods. The easiest way is just to use the alias raspberrypi.local, which will act as the IP address. So for example if you typed in <code>ping –c 4 raspberrypi.local</code> it would ping the raspberry pi and it would show you the IP address. You may also enter ifconfig into your terminal, and the address will be under en_ and won’t be the host address. Lastly you can use <code>\nmap –sn IP-addr/CIDR</code> to list all the devices on that IP address with that mask. So in my case I would type in <code>nmap –sn 169.254.1.1/16</code>, or if you had a subnet mask of 255.255.255.0 you could use <code>nmap –sn 169.254.249.1/24.</code></p>
+					<p>Now you’ll need your pi’s IP address. To get this you can use a few different methods. The easiest way is just to use the alias raspberrypi.local, which will act as the IP address (this can be used instead of your IP in most cases as well). So for example if you typed in <code>ping –c 4 raspberrypi.local</code> it would ping the raspberry pi and it would show you the IP address. You may also enter ifconfig into your terminal, and the address will be under en_ and won’t be the host address. Lastly you can use <code>\nmap –sn IP-addr/CIDR</code> to list all the devices on that IP address with that mask. So in my case I would type in <code>nmap –sn 169.254.1.1/16</code>, or if you had a subnet mask of 255.255.255.0 you could use <code>nmap –sn 169.254.249.1/24.</code></p>
 
 					<div class="row">
 						<img class="twelve columns" src="../img/rasp-pi/ping-pi.png"/>
@@ -111,7 +111,7 @@ $ touch ssh</code>
 						<div class="two columns"></div>
 					</div>
 
-					<p>In my case I had an address of 169.254.156.185, so I simply ran <code>ssh pi@169.254.156.185</code> and used the default password raspberry to log into the pi. From here you've ssh'd in, and you can leave the session by simply typing <code>exit</code> and hitting enter.</p>
+					<p>In my case I had an address of 169.254.156.185, so I simply ran <code>ssh pi@169.254.156.185</code> and used the default password raspberry (the default is <code>raspberry</code>) to log into the pi. From here you've ssh'd in, and you can leave the session by simply typing <code>exit</code> and hitting enter.</p>
 
 					<div class="row">
 						<img class="twelve columns" src="../img/rasp-pi/ssh-into-pi.png"/>
@@ -122,7 +122,7 @@ $ touch ssh</code>
 						<div class="two columns"></div>
 					</div>
 
-					<p>So that’s it; you may go from there, but you won’t be able to get access to the internet outside of the pi. To connect, I’d recommend this excellent guide here (<a href="http://www.circuitbasics.com/raspberry-pi-wifi-installing-wifi-dongle/" target="_blank">http://www.circuitbasics.com/raspberry-pi-wifi-installing-wifi-dongle/</a>).</p>
+					<p>So that’s it; you may go from there, but you won’t be able to get access to the internet outside of the pi. To connect, I’d recommend this guide here (<a href="http://www.circuitbasics.com/raspberry-pi-wifi-installing-wifi-dongle/" target="_blank">http://www.circuitbasics.com/raspberry-pi-wifi-installing-wifi-dongle/</a>). Otherwise you can try connecting this to your router with an ethernet cable and powering it, which should allow you to connect to it using the same alias while allowing you to run commands like <code>sudo apt update</code>.</p>
 					
 				</div>
 			</div>
