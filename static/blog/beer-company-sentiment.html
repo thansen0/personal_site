@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Thomas Hansen - Developer, Engineer</title>
+  <meta name="author" content="Thomas Hansen">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="../css/normalize.css">
+  <link rel="stylesheet" href="../css/skeleton.css">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="../img/favicon.ico">
+	
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119980505-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-119980505-1');
+	</script>
+
+</head>
+<body>
+	
+	<!--  Title content of site  -->
+	<div class="container">
+		<div class="row">
+			<div class="content-page-header ten columns">
+				<h1>Twitter Sentiment Analysis of Beer Companies and LGBT support</h1>
+				<h6>By Thomas Hansen</h6>
+			</div>
+		</div>
+		
+		<!--	Story content	-->
+		<div class="content-wrapper">
+			<div class="row content-body">
+				<div class="twelve columns reading-content-style">
+					
+                    <p><b>NOTE: This article was originally published on Substack and moved here on July 17th, 2023</b></p>
+
+					<div class="row full-image-wrapper">
+						<img class="twelve columns" src="../img/beer-sentiment/all-beer-sentiment.png"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns"></div>
+						<div class="two columns"></div>
+					</div>
+
+
+                    <p>Over the last week or so the internet has erupted with controversy over Bud Light sending Dylan Mulvani a custom printed beer as part of a sponsorship.</p>
+
+					<div class="row full-image-wrapper">
+						<img class="six columns" src="../img/beer-sentiment/mulvanet-can.jpg"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns">The Bud Light Mulvaney was sent as part of a sponsorship. Dylan is a transgender TikTok influencer with a young audience, which has caused concern among consumers</div>
+						<div class="two columns"></div>
+					</div>
+
+
+                    <p>I don’t know whether you should boycott or buy more Bud Light, but I do think it would be interesting to see how vocal Bud Light is about transgender issues on Twitter, and then compare that to the rest of the industry.</p>
+
+                    <h3>How the Sentiment Analysis Works</h3>
+
+                    <p>Gauging how to rank sentiment isn’t obvious, and it had to be done automatically due to the ~110k tweets between the brands I was looking at. Basing this off a BERT model was an obvious choice however given its high accuracy out of the box and my familiarity with it. Their “small bert” model worked well for the relatively low complexity of the task.</p>
+
+                    <p>I trained on two fields; support for LGBT, and specifically supporting transgender, i.e. “gendered” ideology. Things which broadly supported LGBT issues (gay marriage, coming out, etc) were labeled as being pro-LGBT, while things specifically calling out trans issues (such as the hashtag #TransDayOfVisibility) were labeled with both. I classified a few hundred data points manually, and then went back and labeled edge cases which the model was struggling with. These edge cases helped the model the most, as labeling an additional 1-200 tweets didn’t meaningfully improve the models accuracy, however labeling the edge cases provided a meaningful boost. The fact I needed so few data points for such strong results (accuracy ~96%) surprised me a bit, however I think this is in part due to the similar language companies tend to use across the board. Even companies with more “informal” approaches to Twitter produced tweets which were easily recognizable by the model.</p>
+
+                    <p>Ultimately the ratio used to determine tweet support was (total predictive score / total number of tweets) * 100. Each tweet is assigned a value between 0 and 1, 1 being complete support and 0 being indifference. These values are then multiplied by 100 to be more readable. So a tweet bragging about receiving an inclusivity award might receive a score of 98.43, while a tweet marketing an autumn flavor of beer might get a score of 0.254. Ultimately however this means tweets where the company brags about being inclusive but doesn’t mention LGBT/trans may still get a score of 20 or 40.</p>
+
+                    <p>Here’s an example of a pro-LGBT and trans post by New Belgium, a company that markets heavily into inclusivity and politics. This tweet was classified with a pro-LGBT score of 0.9844 (98.44) and a pro-trans score of 0.8946 (89.46)</p>
+
+
+					<div class="row full-image-wrapper">
+						<img class="ten columns" src="../img/beer-sentiment/new-belgium-lgbt-tweet.jpg"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns"><a href="twitter.com/newbelgium/status/1272662122258808834">Original Tweet</a></div>
+						<div class="two columns"></div>
+					</div>
+
+                    <p>Further all tweets have a value slightly above 0, so even a company which never talks about LGBT or transgender issues may still have an average predicted score of 0.5, which should be kept in mind. Generally a company which is around 1 point or below doesn’t ever talk about LGBT politics, and the value is noise.</p>
+
+                    <h3>The Results</h3>
+
+                    <p>As you may have noticed, Bud Light wasn’t huge on LGBT issues, and was even below average. This may explain why there was so much outcry, since this appears to be such a strong deviation from their expected marketing.</p>
+
+                    <p>Additionally Constellation Brands was the highest ranking company, despite being a parent company to other brands which ranked lower on the list (such as Modelo). It also had one of the only pro-transgender scores above the noise level (which is about 1 point). This would suggest they’re talking about LGBT issues as a pitch to investors, not their customers, and looking at their tweets this seems to be the case. This seems to be similar to what Anheuser-Busch has done, who’s twitter has a higher pro-LGBT and trans rating than their product pages Bud Light and Budweiser. Most of their tweets about LGBT issues are bragging about receiving awards for an inclusive workplace, or ESG scores and their implications.</p>
+
+                    <p>Further I threw in a few non-beer companies who produced alcoholic drinks just to see how they’d compare, and surprisingly they were among the lowest rated. White Claw and High Noon, both popular among young audiences, had the two lowest pro-LGBT scores. Nooners had the highest score among the alcoholic companies, however it still sat in the bottom half.</p>
+
+					<div class="row full-image-wrapper">
+						<img class="twelve columns" src="../img/beer-sentiment/all-beer-sentiment-pro-trans.png"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns"></div>
+						<div class="two columns"></div>
+					</div>
+
+                    <p>Sorting by pro-transgender shows that most brands stay out of it, and as mentioned above it seems more popular among corporate twitter than consumer twitter.</p>
+
+                    <p>Most brands tweet so infrequently about support for trans issues I would disregard it as noise. Pabst Blue Ribbon, the third highest ranking, only has an average of about 2 out of 100. Their highest ranking tweet on the pro-trans scale only matches with trans issues by a margin of 35% (so it’s predicted as not pro-trans) and it’s about Taylor Swift.</p>
+
+					<div class="row full-image-wrapper">
+						<img class="ten columns" src="../img/beer-sentiment/pabst-taylor-swift.jpg"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns">Pabst, along with most other beer companies, don’t post about trans issues and thus their highest rated tweet along the pro-trans ranking is instead about <a href="https://twitter.com/PabstBlueRibbon/status/1595165462564069377">Taylor Swift</a>. Interestingly none of my pre-labeled tweets mentioned Swift, which suggests the BERT model itself associates Swift with pro-trans sentiment</div>
+						<div class="two columns"></div>
+					</div>
+
+                    <p>Constellation Brands does make pro-trans tweets, however again it is infrequently over the past few years. Looking through the data there are only a couple examples like the one below out of their 1186 tweets.</p>
+
+					<div class="row full-image-wrapper">
+						<img class="ten columns" src="../img/beer-sentiment/constellation-diversity.jpg"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns"><a href="twitter.com/cbrands/status/1377365146264236033">Original Tweet</a></div>
+						<div class="two columns"></div>
+					</div>
+
+                    <h3>And Finally...</h3>
+                    
+                    <p>Just for fun I wanted to compare the top 5 beer brands in the US as well as Cola, just to see how the popular soda compares.</p>
+
+					<div class="row full-image-wrapper">
+						<img class="ten columns" src="../img/beer-sentiment/major-beer-sentiment-pro-lgbt.png"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns"></div>
+						<div class="two columns"></div>
+					</div>
+
+                    <p>Opposite of what I had expected, Cola had one of the lowest average rankings, appearing second to last on my list of major brands. Why this is the case is hard to say, although it could have something to do with the fact they tweet a lot, having 3290 tweets (and reaching the cap twitter lets me download from an account).</p>
+
+
+
+				</div>
+			</div>
+			<div class="row content-footer">
+				<div class="content-footer-dates">04-14-2022</div>
+			</div>
+		</div>
+	
+		<!--	Blog link	-->
+		<div class="content-wrapper">
+			<div class="row content-center-button">
+				<a href="../blog.html" class="button">Article List</a>
+			</div>
+		</div>
+		
+	</div>
+	
+	<!--  footer  -->
+	<div class="container footer-container">
+		<div class="footer-wrapper">
+			<div class="row">
+				<div class="three columns">&nbsp;
+				</div>
+				<div class="six columns">
+					<div class="footer-line">Thomas Hansen</div>
+					<div class="footer-line">Built using Skeleton on Sibyl.</div>
+					<div class="footer-line">You may contact me on my <a href="https://www.linkedin.com/in/thomas-hansen-60b83210b/">linkedin</a>.</div>
+					<div class="footer-copyright">Copyright 2023</div>
+				</div>
+				<div class="three columns">&nbsp;
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -157,6 +157,9 @@ html {
 .full-image-wrapper {
 	margin: auto;
 	width: 85%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 @media (max-width: 750px) {
