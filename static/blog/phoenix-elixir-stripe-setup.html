@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Thomas Hansen - Developer, Engineer</title>
+  <meta name="author" content="Thomas Hansen">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="../css/normalize.css">
+  <link rel="stylesheet" href="../css/skeleton.css">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="../img/favicon.ico">
+	
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119980505-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-119980505-1');
+	</script>
+
+</head>
+<body>
+	
+	<!--  Title content of site  -->
+	<div class="container">
+		<div class="row">
+			<div class="content-page-header ten columns">
+				<h1>Setting up stripe subscription payments with phoenix/elixir and stripity-stripe</h1>
+				<h6>Thomas Hansen</h6>
+			</div>
+		</div>
+		
+		<!--	Story content	-->
+		<div class="content-wrapper">
+			<div class="row content-body">
+				<div class="twelve columns reading-content-style">
+					
+                    <p>Currently <a href="https://tolc.io/blog/stripe-with-elixir-and-phoenix">tolc</a> has an excellent guide on doing just what I'm about to describe, and my guide will be very similar. However since that guide was written a couple things have changed (such as the Route package is now deprecated) and I thought it could use some more context, so that's what I've written here.</p>
+
+                    <h3>What we'll be building</h3> 
+
+                    <p>This will be a minimal guide on setting up the <a href="https://github.com/beam-community/stripity-stripe">stripity-stripe</a> dependency to accept a subscription payment links on Stripe. The bulk of the code lies in the Stripe.BillingPortal API, which allows you to create a Stripe Billing Portal to link to users, and then recieve information from the Billing Portal through webhooks. If you do not need to integrate into a site you can instead just use <a href="https://stripe.com/docs/payment-links">Stripe Payment links</a> (no code or webhooks but the possibility of adding later). Other solutions like Big Commerce allow you to set up a complete marketplace, while Gumroad makes it easy to sell just one item. A million custom solutions like this exist, so I won't get into it.</p>
+
+                    <h3>Prerequisites</h3>
+
+                    <p>I have shamelessly stolen the tolc guide's prerequisites and placed them here:</p>
+
+                    <ol>
+                        <li>A <a href="https://dashboard.stripe.com/register">Stripe account</a></li>
+                        <li>A Stripe <a href="https://dashboard.stripe.com/test/apikeys">API (test) key</a></li>
+                        <li>A Stripe webhook <a href="https://dashboard.stripe.com/test/webhooks">(test) secret</a></li>
+                        <li>Create a <a href="https://dashboard.stripe.com/test/products"Stripe product</a></a></li>
+                        <li>A Stripe price id for that product (looks like <code>price_xx...</code>)</li>
+                        <li>The <a href="https://stripe.com/docs/stripe-cli">Stripe CLI</a> (just for testing)</li>
+                        <li>An Elixir Phoenix project</li>
+                    </ol>
+
+
+                    <h3>Setup</h3>
+
+                    <p>I used version <code>3.1.1</code>, and it will have to be added to your <code>mix.exs</code> file like so:
+
+<pre>
+<code>{:stripity_stripe, "~> 3.1.1"}
+</code>
+</pre>
+
+                    <p>You will also have to add API keys, and in phoenix that's usually done with environment variables.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					<p>I’ve always preferred to buy american made when possible, and it’s this preference which has led to me owning both of the ATX-compatible American made computer cases currently being produced (server hardware or weird sizes notwithstanding). Given my experience assembling computers for my lab in grad school, it seemed fitting I review these two cases, and talk about my experiences living with them.</p>
+					
+					<p>These cases are the Wisconsin-made <a href="https://www.ceptagon.com/home">Ceptagon CP-M1</a>, and the Colorado manufactured <a href="https://system76.com/components">System76 Nebula</a>; in this case I'll be reviewing their Nebula 36, which is both what I believe to be their most common size and the most similar to the Ceptagon.</p>
+
+
+					<div class="row full-image-wrapper">
+						<img class="six columns" src="../img/computer-case/ceptagon-without-foam-open.JPG"/>
+						<img class="six columns" src="../img/computer-case/nebula-completed-case.jpg"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns">Ceptagon case in use with blue fans, and new Nebula case fully assembled.</div>
+						<div class="two columns"></div>
+					</div>
+
+
+					<h3>Ceptagon CP-M1</h3>
+
+					<p>Originally launched for $300, the Cepagon has come way down in price to a very competitive $100 with free shipping, although it comes with some quirks. For instance they only gave me five pci slot covers and way more cable management straps and screws than any human could need, and from reading other reviews I know I’m not the only person to experience this. This is also the only computer case I’ve ever encountered where the metal texturing reminds me of farm equipment, which I suppose is a throwback to their Wisconsin heritage.</p>
+
+					<p>The case construction is unique, although it doesn’t have as many positives as one may think. On first appearance this case looks like it would be a joy to move around and work on, given the two grab handles and open design. In reality, the position of the power supply gets in the way of your hands and blocks access to most components, and the depth of the case means very little light can get in without removing all three outer panels. The power supply also has no retaining braces, which means when you’re driving it around you either have to rest the case so the power supply is on the bottom and the GPU is hanging, or the GPU lies flat while the power supply sits above it held up by only 4 screws (although to Ceptagon’s credit, I’ve driven over 3000 miles without issue). Even the grab handles are a bit disappointing, because the outer aluminum panels form the handle you actually hold. So instead of directly holding the steel subframe, you’re holding an aluminum panel which is resting most of its weight on two screws.</p>
+
+					<div class="row full-image-wrapper">
+						<img class="twelve columns" src="../img/computer-case/ceptagon-with-foam-open.JPG"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns">NOTICE - Ceptagon case does NOT come with foam; I added this in an attempt to quiet my loud fans which I eventually just replaced with Arctic P12s. I was inspired by the be quiet! 500DX, which we used a lot in my research since it's especially quiet, however I think that's largely due to its 140mm fans, not the insulation it uses. Unfortunately can't find any more pre-foam pictures.</div>
+						<div class="two columns"></div>
+					</div>
+
+
+					<p>It’s not all bad though; namely the steel subframe makes this case nice to work with. The frame itself contains no plastic, and the 20 (1/20 inch) gauge steel frame is both highly practical and nice to work with. Mounting SSD’s was a breeze, and upward facing motherboard IO with a downward facing power supply makes this case incredibly easy to set up. Unfortunately the threads are just tapped into the steel frame without additional welded inserts, however they used much thicker steel (1/10 inch) which is more confidence inspiring. If you over torque these screws you can strip the threads from the case, which happened to me on one of the GPU mounts, however for the price I’m not terribly upset.</p>
+
+					<div class="row full-image-wrapper">
+						<img class="six columns" src="../img/computer-case/ceptagon-open-case-right.jpg"/>
+						<img class="six columns" src="../img/computer-case/ceptagon-open-case.jpg"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns">Case before moving to the Nebula 36; at this point I had switched to the A4500 and removed the colored fans in favor of much quieter ones. All three aluminum side panels have been removed, and only the steel subframe is visible.</div>
+						<div class="two columns"></div>
+					</div>
+
+					<p>Even the aluminum panels are refreshingly thick compared to other cases in this price range. I measured them out to 12 gauge (1/10th inch) aluminum, which makes them feel much more substantial than even some other premium cases. The latest trend in Shenzhen is to use aluminum foil for anything that’s not load bearing, and I’m happy to see that wasn’t duplicated here. Personally I think this case could have been made extra special by using even thicker paneling for both the frame and outer panels, however as it stands you’re at least not missing out.</p>
+
+					<p>Unfortunately not everything is positive, as I found the metal fasteners for the front panel to be inadequate. You’re supposed to be able to insert the above fastener into a hole on the steel frame, however in my experience this has never worked. Mine shipped with one fully compressed (so it wouldn’t catch when pushed in), and my ownership experience has been trying to force them into the correct shape over and over until they started to break off, at which point I just started taping the front panel on. You could drill the fasteners out and put bolts there, which a more motivated consumer may do, however I can’t be bothered.</p>
+
+					<div class="row full-image-wrapper">
+						<img class="twelve columns" src="../img/computer-case/ceptagon-fastener.jpg"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns">Fastener used on the front panel of the Ceptagon case. Over time they break and become misaligned, and even on delivery mine weren't aligned very well.</div>
+						<div class="two columns"></div>
+					</div>
+
+					<p>Lastly I found airflow to be more than adequate, despite the cables throughout the case. I have an intel 12700F and have had both a 2070 Super and RTX 4500 in the case, and I leave it on silent even during heavy gaming. When playing cyberpunk I’ve never seen the CPU go above 40 degrees, and most of that was when I only had 3 120mm case fans. These results have been replicated by LTT, who found (in other cases) that poor cable management doesn’t have a measurable effect on airflow.</p>
+
+					<p>This is a fun, affordable case with lots of character which I wouldn’t hesitate to recommend to someone who wants something unique but doesn’t want to be burdened by assumptions guests will make when they see your computer has a glass panel and internal RGB lighting. I found myself frequently frustrated by the front panel fasteners, however the ease of assembly and easy motherboard IO access make up for this in my mind.</p>
+
+
+
+					<h3>System 76 - Nebula 36</h3>
+
+					<div class="row full-image-wrapper">
+						<img class="twelve columns" src="../img/computer-case/nebula-unassembled.jpg"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns">Unassembled case, shortly after coming out of the box.</div>
+						<div class="two columns"></div>
+					</div>
+
+					<p>Given the case was designed and built in Denver, CO, the cities aerospace heritage really shows through. Just holding this case gives the impression of a quality construction, with precise machining and every panel imparts a feeling of confidence. This is in stark contrast to the Wisconsin made Ceptagon, which has more of a comforting farm-equiptment feeling to it. This case costs $269 plus a mandatory 50 shipping (with a delivery signature), making it $320. If you want to use a 4090 then be prepared to spend even more, since the Nebula 49 runs for 329 plus over 50 for shipping, making it $380, although their mini ITX case runs for less. System76 does conveniently offer <a href="https://tech-docs.system76.com/models/nebula36-1/README.html">detailed specs documentation</a> if you're interested in reading about its specifics.</p>
+
+					<p>The case is also built with a sturdy 2mm aluminum for both the outer and inner casing. Unfortunately the threads for the motherboard screws are drilled into the aluminum backplane, which could cause reliability issues if you over torque the screws, so I guess just don't over torque them. The issue I did have is you have to screw in fasteners which ultimately hold the motherboard, and one of mine bumps against the case, making it hard to screw the steel fastener into the aluminum case. I think in the event you stripped the case the fastener sticks out enough you could use a bolt to hold it on, although if you’ve spent $320 on a case I don’t think you want to have to go that route.</p>
+
+					<p>A strictly positive note is that they included two fans with my case, despite the fact I didn’t think I paid for any. It’s not clear if these were included in error or deliberately, however I appreciate it. I think everyone gets the 140 mm fan, I’m not sure if we all get the 120 mm CPU fan. I will say however that the additional CPU fan gives me added confidence even if you were using a lower profile CPU cooler, although I won’t be doing any benchmarking so I can’t say if it’s actually better.</p>
+
+					<p>I also really liked the GPU mounting system. Instead of using screws and holes, this one used metal slots which not only held the GPU better, but do a better job slotting into the case, which I thought was an improvement over the Ceptagon CP-M1. Generally this case is full of really well designed easter eggs and features. Everywhere you look you see little rocket ships or 76 emblems engraved into the case, and there are a number of dedicated fan mounts and conveinently placed fan splitters in the case.</p>
+
+					<div class="row full-image-wrapper">
+						<img class="six columns" src="../img/computer-case/nebula-gpu-mount-open.jpg"/>
+						<img class="six columns" src="../img/computer-case/nebula-gpu-mount-closed.jpg"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns">Nebula GPU mounting system, both partially and fully assembled.</div>
+						<div class="two columns"></div>
+					</div>
+
+					<p>There were a few quirks when assembling this case, however. For one the corners in the hard drive bay were too rounded to mount my 2.5 inch SSD into the screw holes, which seems odd given they clearly put a ton of work into machining this part. This makes me wonder if I'm somehow just using it wrong, which should always be considered as a possibility. When adding fans to the side of the case through the side brace using standard fan screws, you can only mount one fan on the center mount at a time, despite their being enough room for two and having two plugs for fan headers (shown below). The case is also one of the most complex cases I've ever built, and while many of the build in fan plugs and mounts are extremely functional, this isn't a case you'd want to constantly be swapping out parts on. That said, cable routing can sometimes be easier due to the external casing; the CPU motherboard power cable in particular is an easy install on this case.</p>
+
+					<div class="row full-image-wrapper">
+						<img class="twelve columns" src="../img/computer-case/nebula-fan-mount.jpg"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns">Center/GPU brace. On the reverse side is two ports to connect three or four-pin fans to, however you can only mount one fan using standard screws at a time. I think you could mount two fans if you used Noctua's rubber anti-vibration connectors, however I don't have one to test. The brace itself is incredibly well made, with two rocket ships and fan connectors built in.</div>
+						<div class="two columns"></div>
+					</div>
+
+					<p>Also although I’m not saying it’s worth the $50 shipping, the box they used seems to be the same box they ship fully build computers in, which means if you need to you should be able to move your whole computer around in the box, which wasn’t really something I’d recommend with the Ceptagon.</p>
+
+					<p>I’ve only spent a few days with my Nebula 36, so I can't give a long term review. But on first impressions it feels really good and does all the things I would expect from a $320 case. On a personal note I love how the inside of the case looks, it reminds me of the insides of an Intel Apple Mac Pro (which is a good thing, those were exceptionally beautiful computers).</p>
+
+					<div class="row full-image-wrapper">
+						<img class="twelve columns" src="../img/computer-case/nebula-case-assembled-front.jpg"/>
+					</div>
+					<div class="row">
+						<div class="two columns">&nbsp;</div>
+						<div class="image-caption eight columns">Here you can see the case from the front. The 76 marks the external hard drive bay, and the CPU shell contains two optional internal mounts for fans. On the bottom of the case you can see the 140mm fan, and on the front is a 120mm fan I purchased separately.</div>
+						<div class="two columns"></div>
+					</div>
+
+					<h3>Final Thoughts</h3>
+
+					<p>Given the price difference, these cases seem to target different markets, although I like the direction each company took. They each have exceptional build quality compared to similarly priced Chinese competitors, don't meaningfully use plastic, avoid childish gimmicks like clear plastic panels or RGB LED's, and are reasonably well thought out. On a pure cost basis, I wouldn't blame someone for going with a be quiet! 500DX or an NZXT H5, however the Ceptagon and System76 Nebula each offer a premium, subtle design with compelling build qualities and could be considered great picks for the money.</p>
+
+					
+				</div>
+			</div>
+			<div class="row content-footer">
+				<div class="content-footer-dates">1-25-2024</div>
+			</div>
+		</div>
+	
+		<!--	Blog link	-->
+		<div class="content-wrapper">
+			<div class="row content-center-button">
+				<a href="../blog.html" class="button">Article List</a>
+			</div>
+		</div>
+		
+	</div>
+	
+	<!--  footer  -->
+	<div class="container footer-container">
+		<div class="footer-wrapper">
+			<div class="row">
+				<div class="three columns">&nbsp;
+				</div>
+				<div class="six columns">
+					<div class="footer-line">Thomas Hansen</div>
+					<div class="footer-line">Please contact me on my <a href="https://www.linkedin.com/in/thomas-hansen-60b83210b/">linkedin</a> if you have any questions or want to get in contact with me.</div>
+					<div class="footer-copyright">Copyright 2024</div>
+				</div>
+				<div class="three columns">&nbsp;
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
