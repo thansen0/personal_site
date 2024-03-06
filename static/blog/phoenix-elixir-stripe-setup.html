@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Thomas Hansen - Developer, Engineer</title>
+  <meta name="author" content="Thomas Hansen">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="../css/normalize.css">
+  <link rel="stylesheet" href="../css/skeleton.css">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="../img/favicon.ico">
+
+    <!-- Syntax Highlighter
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github.min.css">
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
+	
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119980505-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-119980505-1');
+	</script>
+
+    <script>hljs.highlightAll();</script>
+
+</head>
+<body>
+	
+	<!--  Title content of site  -->
+	<div class="container">
+		<div class="row">
+			<div class="content-page-header ten columns">
+				<h1>The Simplest Possible Stripe Subscriptions Setup with Phoenix and stripity-stripe</h1>
+				<h6>Thomas Hansen</h6>
+			</div>
+		</div>
+		
+		<!--	Story content	-->
+		<div class="content-wrapper">
+			<div class="row content-body">
+				<div class="twelve columns reading-content-style">
+					
+                    <p>Currently <a href="https://tolc.io/blog/stripe-with-elixir-and-phoenix">tolc</a> has an excellent guide on doing just what I'm about to describe, and my guide will be very similar. However since that guide was written a couple things have changed (such as the Route package is now deprecated) and I thought it could use some more context. Additionally his guide just uses Stripe BillingPortal, which I found provides a less intuitive experience compared to Stripe.Checkout.</p>
+
+                    <p>Additionally (and crucially) my guide doesn't have webhooks. Stripe really wants you to use them, and you probably should, but they're not necessary to start playing around with the Stripe API and management panel.</p>
+
+                    <h3>What we'll be building</h3> 
+
+                    <p>This will be a minimal guide on setting up the <a href="https://github.com/beam-community/stripity-stripe">stripity-stripe</a> dependency to accept a subscription payment links on Stripe. The bulk of the code lies in the Stripe.Checkout API, which allows you to create a checkout session for a given product, and then receive information as a response to the session. If you do not need to integrate into a site you can instead just use <a href="https://stripe.com/docs/payment-links">Stripe Payment links</a> (no code or webhooks but the possibility of adding later). Other solutions like Big Commerce allow you to set up a complete marketplace, while Gumroad makes it easy to sell just one item. A million custom solutions like this exist, so I won't get into it, but they can be considered.</p>
+
+                    <h3>Prerequisites</h3>
+
+                    <p>I have shamelessly stolen the tolc guide's prerequisites and placed them here:</p>
+
+                    <ol type="1">
+                        <li>A <a href="https://dashboard.stripe.com/register">Stripe account</a></li>
+                        <li>A Stripe <a href="https://dashboard.stripe.com/test/apikeys">API (test) key</a></li>
+                        <li>A Stripe webhook <a href="https://dashboard.stripe.com/test/webhooks">(test) secret</a></li>
+                        <li>Create a <a href="https://dashboard.stripe.com/test/products">Stripe product</a></li>
+                        <li>A Stripe price id for that product (looks like <code>price_xx...</code>)</li>
+                        <li>The <a href="https://stripe.com/docs/stripe-cli">Stripe CLI</a> (just for testing)</li>
+                        <li>An Elixir Phoenix project</li>
+                    </ol>
+
+                    <h3>Setup</h3>
+
+                    <p>I used version <code>3.1.1</code>, and it will have to be added to your <code>mix.exs</code> file like so:
+
+<pre>
+<code class="elixir">{:stripity_stripe, "~> 3.1.1"}
+</code>
+</pre>
+
+                    <p>You will also have to add API keys, and in phoenix that's usually done with environment variables. In my <code>dev.exs</code> file I added</p>
+
+<pre>
+<code class="elixir"># config/dev.exs
+
+# Stripe API keys 
+stripe_api_key = System.get_env("STRIPE_API_SECRET") ||
+    raise """
+    environment variable STRIPE_API_KEY is missing.
+    You can obtain it from the stripe dashboard: https://dashboard.stripe.com/test/apikeys
+    """
+
+stripe_webhook_key = System.get_env("STRIPE_WEBHOOK_SIGNING_SECRET") ||
+    raise """
+    environment variable STRIPE_WEBHOOK_SIGNING_SECRET is missing.
+    You can obtain it from the stripe dashboard: https://dashboard.stripe.com/account/webhooks
+    """
+
+config :stripity_stripe,
+  api_key: stripe_api_key,
+  signing_secret: stripe_webhook_key,
+  stripe_price_id: "price_..."
+</code>
+</pre>
+
+                    <p>Which also includes my price_id. Your <code>price id</code> is essentially the subscription the user will subscribe to, and in my case I only had one. You will need different <code>price_id</code> values for development and production, so I put mine in my <code>dev.exs</code> and <code>prod.exs</code>. It could be wise to create a product schema which contains your price id's and such, however to keep it as simple as possible I put mine here.</p>
+
+                    <p>Although not necessary, you may also want to add a base_url variable. Verified routes don't populate into full url's in json packets, and so I used a separate function to build a url when I needed too, which utilized this variable. I had this in my dev.exs and prod.exs.</p>
+
+<pre><code class="elixir">config :parentcontrolswin, base_url: "https://www.your-url.com"</code></pre>
+
+                    <p>Locally I load my environment variables using a <code>.env</code> file, which is loaded with <code>source .env</code></p>
+
+
+<pre>
+<code>export STRIPE_API_SECRET="sk_test_..."
+export STRIPE_WEBHOOK_SIGNING_SECRET="whsec_..."
+</code>
+</pre>
+
+                    <h3>Creating Stripe Subscriptions</h3>
+
+                    <p>Now the real fun begins. When a user tries to subscribe, Stripe first creates an "account" for them and returns a stripe_customer_id for us to save, which identifies them in future requests. I added <code>stripe_customer_id</code> to my user migration, making it a field I can save to user. In the example code below, I used Pow authentication library to manage login tokens, but I avoided using their <code>Pow.Plug.current_user(conn)</code> function, since the customer id may still be cached as nil and may cause issues at runtime (which is why I requery it with <code>get_stripe_customer_id_from_email(user.email)</code>).</p>
+
+                    <p>The bulk of the work is done in the subscription controller. Since Phoenix is moving away from the Routes Helper and towards verified routes, there isn't a good way to input the return path. For me I just saved the full return path URL or used my custom <code>build_external_url</code> function to construct a return path.</p>
+
+                    <p>One thing that is notable is since we're not using webhooks, I have to ping the Stripe server every time I want to check if someone is subscribed with the <code>is_subscribed?</code> function. This is suboptimal for a program of any scale or if you need to frequently check whether they're subscribed.</p>
+
+<pre>
+<code class="elixir"># lib/my_app_web/controllers/subscription_controller.ex
+defmodule MyAppWeb.SubscriptionController do
+    use MyAppWeb, :controller
+    alias Stripe
+
+    def index(conn, _params) do
+        render(conn, :index)
+    end
+
+    def success(conn, _params) do
+        conn
+        |> put_flash(:info, "Thanks you for subscribing! Don't hesitate to contact us if you have any questions!")
+        |> redirect(to: ~p"/install_pcw")
+    end
+
+    def cancel(conn, _params) do
+        conn
+        |> put_flash(:error, "Your attempt to subscribe was canceled; are not subscribed.")
+        |> redirect(to: ~p"/subscriptions")
+    end
+
+    # This function will check if the customer already has a stripe_customer_id. If they don't, we create one. If they do, we 
+    # attempt to check them out if they're not currently subscribed.
+    def new(conn, %{}) do
+        # Or if it is a recurring customer, you can provide customer_id
+        user = Pow.Plug.current_user(conn)
+        customer_id = stripe_customer_id(conn, user)
+        
+        # Get this from the Stripe dashboard for your product
+        price_id = Application.get_env(:stripity_stripe, :stripe_price_id)
+        coupon_id = Application.get_env(:stripity_stripe, :stripe_coupon_id)
+        quantity = 1
+
+        # should never be empty after stripe_customer_id
+        if customer_id in [nil, ""] do
+            conn
+            |> put_flash(:error, "Error finding your customer id. Please try again or contact support. #{customer_id}")
+            |> redirect(to: ~p"/subscriptions")
+        end
+
+        checkout_session = %{
+            payment_method_types: ["card"],
+            customer: customer_id,
+            mode: "subscription",
+            line_items: [%{
+                price: price_id,
+                quantity: quantity
+            }],
+            success_url: build_external_url("/subscriptions/new/success"),
+            cancel_url: build_external_url("/subscriptions/new/cancel")
+        }
+        
+        session = case Stripe.Checkout.Session.create(checkout_session) do
+            {:ok, session} ->
+                session
+            {:error, stripe_error} ->
+                conn
+                |> put_flash(:error, "Something went bringing you to checkout; #{stripe_error.message}")
+                |> redirect(to: ~p"/subscriptions")
+        end
+
+        redirect(conn, external: session.url)
+
+        case Stripe.Checkout.Session.create(checkout_session) do
+            {:ok, session} ->
+                redirect(conn, external: session.url)
+            {:error, stripe_error} ->
+                conn
+                |> put_flash(:error, "Something went wrong building your checkout portal, #{stripe_error.message}")
+                |> redirect(to: ~p"/subscriptions")
+        end
+    end
+
+    # This includes logic to make sure a user has a stripe account, and if so it will 
+    # redirect them to the Stripe Management Portal
+    def edit(conn, %{}) do
+        user = Pow.Plug.current_user(conn)
+        customer_id = get_stripe_customer_id_from_email(user.email)
+        if customer_id in [nil, ""] do
+            conn
+            |> put_flash(:error, "You must subscribe first before viewing Stripe Account Management. #{customer_id}")
+            |> redirect(to: ~p"/subscriptions")
+        end
+
+        billing_page = Stripe.BillingPortal.Session.create(%{
+            customer: customer_id,
+            return_url: build_external_url("/devices")
+        })
+
+        case billing_page do
+            {:ok, session} ->
+                redirect(conn, external: session.url)
+
+            {:error, stripe_error} ->
+                conn
+                |> put_flash(:error, "Something went wrong with edit. #{stripe_error.message}")
+                |> redirect(to: ~p"/")
+        end
+    end
+
+    # check if a customer id exists, and if so return a new one
+    defp stripe_customer_id(conn, user) do
+        # trying to solve a caching issue with Pow
+        stripe_customer_id = get_stripe_customer_id_from_email(user.email)
+
+        if stripe_customer_id in [nil, ""] do
+            new_customer = %{
+                email: user.email,
+                description: "Subscription user"
+            }
+
+            stripe_customer_id = case Stripe.Customer.create(new_customer) do
+                {:ok, stripe_customer} -> 
+                    stripe_customer.id
+                {:error, stripe_customer_error} -> 
+                    conn
+                    |> put_flash(:error, "Error getting stripe_customer_id. Error: #{stripe_customer_error.message}")
+                    |> redirect(to: ~p"/subscriptions")
+                    nil
+            end
+
+            # create changeset for user
+            changeset = MyApp.Users.User.update_stripe_customer_id_changeset(user, %{stripe_customer_id: stripe_customer_id})
+            case MyApp.Repo.update(changeset) do
+                {:ok, updated_user} -> 
+                    IO.inspect(updated_user)
+                    # Handle success, maybe return the updated user or a success message
+                {:error, _changeset} -> 
+                    conn
+                    |> put_flash(:error, "Error setting stripe_customer_id in schema.")
+                    |> redirect(to: ~p"/subscriptions")
+            end
+
+            stripe_customer_id # return value
+        else
+            if is_subscribed?(user) do
+                conn
+                |> put_flash(:info, "Our records show you are currently subscribed! Please contact us if you do not believe this is the case or if you're experiencing issues.")
+                |> redirect(to: ~p"/registration/edit")
+            else
+                # return 
+                stripe_customer_id
+            end
+        end
+    end
+
+    # returns customer id from email. Used to avoid Pow caching issues; there may be other ways to resolve this if 
+    # you're not using Pow or if you use Pow.Plug.update_user
+    defp get_stripe_customer_id_from_email(email) do
+        MyApp.Repo.get_by(MyApp.Users.User, email: email).stripe_customer_id
+    end
+
+    # returns true if subscribed
+    def is_subscribed?(user) do
+        customer_id = get_stripe_customer_id_from_email(user.email)
+
+        # defined here for scope
+        if customer_id in [nil, ""] do
+            # no customer, can't be subscribed
+            false
+        else
+            # case Stripe.Subscription.list(%{customer: customer_id, status: "active"}) do
+            case Stripe.Subscription.list(%{customer: customer_id}) do
+                {:ok, subscriptions} ->
+
+                    Enum.any?(subscriptions.data, fn subscription ->
+                        subscription.status == "active" || subscription.status == "trialing"
+                    end)
+
+                    # .data holds all of the subscriptions and metadata
+                    # only [] actually matters, but just in case
+                    # subscriptions.data not in [nil, "", []]
+                {:error, _subscriptions} ->
+                    false
+            end
+        end
+    end
+
+    # path MUST have a "/" before it or function won't return valid url
+    def build_external_url(path) do
+        # third arg is optional, default to production value
+        base_url = Application.get_env(:myapp, :base_url, "https://www.your-url.com")
+        base_url <> path
+    end
+end
+</code>
+</pre>
+
+                    <p>I of course added custom routes into <code>router.exs</code></p>
+
+<pre><code class="elixir">  scope "/", MyAppWeb do
+    # TODO: require_auth is a Pow feature to check for sign-in; yours may be different
+    pipe_through [:browser, :require_auth]
+
+    # existing routes ...
+
+    get "/subscriptions", SubscriptionController, :index
+
+    post "/subscriptions/new", SubscriptionController, :new
+    # return urls, below I set them to flash the user a message and then load the home screen
+    get "/subscriptions/new/success", SubscriptionController, :success
+    get "/subscriptions/new/cancel", SubscriptionController, :cancel
+    # post request will take you externally to the Stripe management portal
+    post "/subscriptions/manage", SubscriptionController, :edit
+  end
+</code></pre>
+
+                    <p>And your subscription post request will look like this:</p>
+
+<pre><code class="elixir"><%= form_for @conn, ~p"/subscriptions/new", [method: :post], fn f -> %>
+    <%= submit "Add Payment and Subscribe", class: "button" %>
+<% end %></code></pre>
+
+<p>While a (technically optional) management post request will look like this:</p>
+
+<pre><code class="elixir"><%= form_for @conn, ~p"/subscriptions/manage", [method: :post], fn _f -> %>
+  <%= submit "Manage Billing", class: "button button-primary" %>
+<% end %></code></pre>
+
+                    <p>This links you to a page where the user can see and cancel their subscriptions.</p>
+
+                    <h3>Final thoughts</h3>
+
+                    <p>That's basically it! I wanted to keep this as simple as possible, so you can start playing around with more features. Webhooks are of course something you should start thinking about and planning for, however they're not necessary for a functional app. If Stripe requires you make them for your service, you can just set them up and let them go nowhere.</p>
+
+                    <h5>Coupon Codes</h5>
+
+                    <p>Additionally the user cannot enter a coupon code in the payments page if you use Stripe.Checkout.Session. To do this, you have to add a coupon field to discounts, as shown here:</p>
+
+                <pre><code class="elixir">checkout_session = %{
+    payment_method_types: ["card"],
+    customer: customer_id,
+    mode: "subscription",
+    discounts: [%{
+        coupon: coupon_id
+    }],
+    line_items: [%{
+        price: price_id,
+        quantity: quantity
+    }],
+        success_url: build_external_url("/subscriptions/new/success"),
+        cancel_url: build_external_url("/subscriptions/new/cancel")
+    }</code></pre>
+
+                    <p>Additionally you'll have to add the coupon code to your environment variables (or in code)</p>
+
+                <pre><code class="elixir">config :stripity_stripe,
+    api_key: stripe_api_key,
+    signing_secret: stripe_webhook_key,
+    stripe_price_id: "price_...",
+    stripe_coupon_id: "********"</code></pre>
+
+                    <p>And then read the variable in so it can be applied when needed.</p>
+
+<pre><code class="elixir">coupon_id = Application.get_env(:stripity_stripe, :stripe_coupon_id)</code></pre>
+
+                    <h5>A brief review of Gigalixir</h5>
+
+                    <p>I used Gigalixir for my project, and adding API keys could be added from the terminal which show up in your dashboard.</p>
+
+                    <pre><code>gigalixir config:set ENV_VARIABLE=foo</code></pre>
+
+                    <p>This said, I'm not sure I would recommend Gigalixir if you're starting a new project. You must manually migrate their free database to a base tier production database, and the cheapest paid tier they offer starts at $50 a month (the minimum charge to be in the tiers is $10 a month, but your database will be an additional $40-ish before accounting for traffic). The free tier is very nice though, and at scale these costs would become much more reasonable. I haven't looked into Heroku recently but I would on my next Phoenix project.</p>
+                    
+                    <h5></h5>
+
+                    <p>Please contact me at <b>contact@thomashansen.xyz</b> if you see any issues with this guide, or if you think something could be more clear! </p>
+
+					
+				</div>
+			</div>
+			<div class="row content-footer">
+				<div class="content-footer-dates">1-25-2024</div>
+                <div class="content-footer-dates">updated 3-05-2024</div>
+			</div>
+		</div>
+	
+		<!--	Blog link	-->
+		<div class="content-wrapper">
+			<div class="row content-center-button">
+				<a href="../blog.html" class="button">Article List</a>
+			</div>
+		</div>
+		
+	</div>
+	
+	<!--  footer  -->
+	<div class="container footer-container">
+		<div class="footer-wrapper">
+			<div class="row">
+				<div class="three columns">&nbsp;
+				</div>
+				<div class="six columns">
+					<div class="footer-line">Thomas Hansen</div>
+					<div class="footer-line">Please contact me at <a href="mailto:contact@thomashansen.xyz">contact@thomashansen.xyz</a> if you have any questions or want to get in contact with me.</div>
+					<div class="footer-copyright">Copyright 2024</div>
+				</div>
+				<div class="three columns">&nbsp;
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
