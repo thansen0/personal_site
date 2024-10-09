@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Thomas Hansen - Developer, Engineer</title>
+  <meta name="author" content="Thomas Hansen">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="../css/normalize.css">
+  <link rel="stylesheet" href="../css/skeleton.css">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="../img/favicon.ico">
+
+    <!-- Syntax Highlighter
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github.min.css">
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
+	
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119980505-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-119980505-1');
+	</script>
+
+    <script>hljs.highlightAll();</script>
+
+</head>
+<body>
+	
+	<!--  Title content of site  -->
+	<div class="container">
+		<div class="row">
+			<div class="content-page-header ten columns">
+				<h1>The Trouble Marketing New Software Products to Conservatives</h1>
+				<h6>Thomas Hansen</h6>
+			</div>
+		</div>
+		
+		<!--	Story content	-->
+		<div class="content-wrapper">
+			<div class="row content-body">
+				<div class="twelve columns reading-content-style">
+					
+                    <p>Currently <a href="https://tolc.io/blog/stripe-with-elixir-and-phoenix">tolc</a> has an excellent guide on doing just what I'm about to describe, and my guide will be very similar. However since that guide was written a couple things have changed (such as the Route package is now deprecated) and I thought it could use some more context. Additionally his guide just uses Stripe BillingPortal, which I found provides a less intuitive experience compared to Stripe.Checkout.</p>
+
+                    <p>Additionally (and crucially) my guide doesn't have webhooks. Stripe really wants you to use them, and you probably should, but they're not necessary to start playing around with the Stripe API and management panel.</p>
+
+                    <h3>What we'll be building</h3> 
+
+
+<p>Around 2017, Luke Smith started making YouTube videos. He was a Linguistics PhD who spoke about linux, the free software movement, and digital sovereignty, all from his computer or while walking around outside. While it might be hard to place Luke’s exact politics, he was by no means left wing. He distrusted big tech, big government, and contributed to a cultural movement within the right to distrust tech.</p>
+
+<p>As his channel grew, around 2020, Luke created an online form for his fans. People piled on, but he noticed something. Users were community building; they were encouraging themselves to spend more time online and were spending too much time on the platform, which is antithetical to his mission. Luke shut it down. </p>
+
+<p>Luke would then spend the next period of his life walking in nature, explaining why you should leave the internet. He pushed for his followers to pay for less controlled software, use more RSS, and embrace free and open source. He then moved to an undisclosed, rural location, with no internet. He would spend months at a time reading old novels, and posting less and less frequently. Despite his best efforts, his channel continued to grow until he simply wasn’t posting content. He had lived the ultimate expression of his message; get offline, and become self-sufficient.</p>
+
+<p>Luke’s story highlights a surprisingly common path for conservatives; the search for self sufficiency. He was surpassed by derivative channels which lacked his authenticity or right-wing opinions but embraced community.</p>
+
+                    <h3>What this article isn't</h3>
+
+<p>I want to be clear up front about three things</p>
+
+<ol>
+    <li>I’m not here to decide what opinions are or aren’t moral, and what platforms are or aren’t ok</li>
+    <li>I’m going to use the term conservative *exceptionally* loosely.</li>
+</ol>
+
+<p>What you’ll read are my experiences trying to set up Parent Controls Win. This was a startup I built, and early on I thought I found a niche in conservative parents. The company is still operational, and you can still sign up, however it has failed to take off like I hoped it would.</p>
+
+                    <h3>The Appeal of Conservative Audiences</h3>
+
+                    <p>The first thing you’ll notice is that advertising is way cheaper when you target conservative audiences. Where targeting LGBT groups may cost 2-4 dollars per thousand impressions, these sites will sell right-wing ads for less than a dollar. Similarly you can run much cheaper ads on, say, Breitbart, than you can on the Huffington Post.</p>
+
+<p>You also find competitors often don’t seem to care about conservatives. NetNanny, an internet filter which prides itself on its filter tech and options, only has <a href="https://www.netnanny.com/features/internet-filter/">14 filters</a>, none of which are what conservatives want. Every conservative parent I spoke with had an opinion about pro-trans content, and while I don’t want to debate the morality of the subject it is clear the demand exists.</p>
+
+                    <h3>Why isn't this turning into profit?</h3>
+
+<p>One of the most interesting things I found speaking with conservatives is a strong distrust of almost all cloud based tech companies. This isn’t coming from grandpa with a landline; this is coming from young parents who have read about online censorship from Google or social media companies, and no longer trust them.</p>
+
+<p>This is a very common, core belief I’ve found among parents, with political views ranging from independent to strongly right-wing. They often assume services or ads coming from companies are being run by people who hate them, and so they participate as little as possible. Unfortunately this has the effect of making it very difficult to reach conservatives. Platforms like Gab simply do not possess the technical infrastructure to deliver targeted ads. In fact, as you get down to it, actual purchase rates on conservative sites can often be more expensive than on a more feature rich but mainstream advertiser (like Google).</p>
+
+<p>This also explains why companies haven’t been able to exploit what appear to be cheap ad costs on conservative sites. Casper and Blue Apron (briefly) became multi-billion dollar companies by finding cheap ads and using them to sell their product. Due to the lack of infrastructure and cultural tendencies of conservatives, I don’t think this could be repeated on most conservative tech sites.</p> 
+
+<h3>What can be done?</h3>
+
+<p>There is a certain irony in this post, because I haven’t found a solution for my product. <a href="https://www.parentcontrols.win/">Parent Controls Win</a> has continued to struggle to find customers, however there are certainly some lessons.<p>
+
+<p>By far the most important thing I learned was that fundamental product design should change. Conservatives don’t like subscriptions, they don’t like uploading data to the cloud, and they don’t like accounts. I have watched a friend of mine set up a new Windows computer while clicking “allow” to all of the privacy questions because she just wanted to make Microsoft happy. A conservative consumer would never do that. There is an inherent distrust in the system, seemingly stemming from the idea that tech products are built by lefty engineers who have been indoctrinated by universities and their peers. I spoke with plumbers and welders with no technical training run linux at home purely out of distrust for Microsoft.</p>
+
+<p>It has been said you can only confirm what customers think of your product when you ask them for credit card information. In my case, I found they weren’t excited for a SaaS. The primary issue was not cost or platform support, it was privacy. Conservative parents, and in particular dads, wanted complete control over the offering. They wanted to keep their daughter offline until she was 16 (something I actually heard), and when they do relent it wasn’t going to be under the eye of a new tech company. Incidentally, I think a home server, which ultimately would have cost the consumer more, would have been the way to go. Conservative parents (dads in particular) want to be able to pull a literal plug on the service. They would rather buy and manage a server than trust a tech company.</p> 
+
+<p>So my best advice is this: if you think you may end up with a conservative audience, you need to design your product in such a way that the company itself, is or could be hostile. The product should either be so necessary that they can’t live without it, or it should be set up in a way that even if the company wants to cut someone off as a customer they can’t.</p>
+
+
+					
+				</div>
+			</div>
+			<div class="row content-footer">
+				<div class="content-footer-dates">10-08-2024</div>
+			</div>
+		</div>
+	
+		<!--	Blog link	-->
+		<div class="content-wrapper">
+			<div class="row content-center-button">
+				<a href="../blog.html" class="button">Article List</a>
+			</div>
+		</div>
+		
+	</div>
+	
+	<!--  footer  -->
+	<div class="container footer-container">
+		<div class="footer-wrapper">
+			<div class="row">
+				<div class="three columns">&nbsp;
+				</div>
+				<div class="six columns">
+					<div class="footer-line">Thomas Hansen</div>
+					<div class="footer-line">Please contact me at <a href="mailto:contact@thomashansen.xyz">contact@thomashansen.xyz</a> if you have any questions or want to get in contact with me.</div>
+					<div class="footer-copyright">Copyright 2024</div>
+				</div>
+				<div class="three columns">&nbsp;
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
