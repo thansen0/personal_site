@@ -30,5 +30,21 @@
         <pubDate>Wed, 01 Nov 2023 12:00:00 GMT</pubDate>
     </item>
 
+    <item>
+        <title>Twitter Sentiment Analysis of Beer Companies and LGBT support</title>
+        <description>An analysis of twitter sentiment of pro-LGBT tweets among beer companies.</description>
+        <link>https://thomashansen.xyz/blog/beer-company-sentiment.html</link>
+        <guid>https://thomashansen.xyz/blog/beer-company-sentiment.html</guid>
+        <pubDate>Sat, 01 Apr 2023 12:00:00 GMT</pubDate>
+    </item>
+
+    <item>
+        <title>Helmet Comparison: WaveCel vs MIPS vs traditional EPS foam</title>
+        <description>An analysis of a variety of studies looking at different helmet technologies including MIPS, WaveCel, SPIN, and even an airbag helmet.</description>
+        <link>https://thomashansen.xyz/blog/best-helmets.html</link>
+        <guid>https://thomashansen.xyz/blog/best-helmets.html</guid>
+        <pubDate>Mon, 01 Aug 2022 12:00:00 GMT</pubDate>
+    </item>
+
 </channel>
 </rss>
