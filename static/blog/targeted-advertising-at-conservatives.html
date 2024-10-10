@@ -61,16 +61,10 @@
 			<div class="row content-body">
 				<div class="twelve columns reading-content-style">
 					
-                    <p>Currently <a href="https://tolc.io/blog/stripe-with-elixir-and-phoenix">tolc</a> has an excellent guide on doing just what I'm about to describe, and my guide will be very similar. However since that guide was written a couple things have changed (such as the Route package is now deprecated) and I thought it could use some more context. Additionally his guide just uses Stripe BillingPortal, which I found provides a less intuitive experience compared to Stripe.Checkout.</p>
 
-                    <p>Additionally (and crucially) my guide doesn't have webhooks. Stripe really wants you to use them, and you probably should, but they're not necessary to start playing around with the Stripe API and management panel.</p>
+<p>In 2017, Luke Smith started making YouTube videos. He was a Linguistics PhD student who made linux tutorials while talking about open source software and digital sovereignty. While he was never explicitly political, he was by no means left wing. He distrusted big tech, big government, and contributed to a cultural movement within the right of distrusting big tech.</p>
 
-                    <h3>What we'll be building</h3> 
-
-
-<p>Around 2017, Luke Smith started making YouTube videos. He was a Linguistics PhD who spoke about linux, the free software movement, and digital sovereignty, all from his computer or while walking around outside. While it might be hard to place Luke’s exact politics, he was by no means left wing. He distrusted big tech, big government, and contributed to a cultural movement within the right to distrust tech.</p>
-
-<p>As his channel grew, around 2020, Luke created an online form for his fans. People piled on, but he noticed something. Users were community building; they were encouraging themselves to spend more time online and were spending too much time on the platform, which is antithetical to his mission. Luke shut it down. </p>
+<p>As his channel grew, Luke created an online form for his fans. People piled on, but he wasn't thrilled. Users were community building; they were encouraging themselves to spend more time online and were spending too much time on the platform, which is antithetical to his mission. Luke shut it down. </p>
 
 <p>Luke would then spend the next period of his life walking in nature, explaining why you should leave the internet. He pushed for his followers to pay for less controlled software, use more RSS, and embrace free and open source. He then moved to an undisclosed, rural location, with no internet. He would spend months at a time reading old novels, and posting less and less frequently. Despite his best efforts, his channel continued to grow until he simply wasn’t posting content. He had lived the ultimate expression of his message; get offline, and become self-sufficient.</p>
 
@@ -80,36 +74,58 @@
 
 <p>I want to be clear up front about three things</p>
 
-<ol>
-    <li>I’m not here to decide what opinions are or aren’t moral, and what platforms are or aren’t ok</li>
-    <li>I’m going to use the term conservative *exceptionally* loosely.</li>
-</ol>
+<div class="row">
+    <div class="one columns">
+    </div>
+    <div class="ten columns">
+        <ol type="1">
+            <li>This <b>isn’t</b> a discussion about politics, just conservative customers</li>
+            <li>I’m going to use the term conservative *exceptionally* loosely, referring to anyone slightly conservative or on a right-wing site</li>
+            <li>This article is based off my experiences building <a href="https://www.parentcontrols.win/">Parent Controls Win</a>, your experiences may be different</li>
+        </ol>
+    </div>
+    <div class="one columns">
+    </div>
+</div>
 
-<p>What you’ll read are my experiences trying to set up Parent Controls Win. This was a startup I built, and early on I thought I found a niche in conservative parents. The company is still operational, and you can still sign up, however it has failed to take off like I hoped it would.</p>
+<p>I would also like to add Parent Controls Win is still operational, and I encourage you to sign up or email us at contact@parentcontrols.win. We have, however, struggled to take off like I had hoped, which is where this article comes from.</p>
+
 
                     <h3>The Appeal of Conservative Audiences</h3>
 
-                    <p>The first thing you’ll notice is that advertising is way cheaper when you target conservative audiences. Where targeting LGBT groups may cost 2-4 dollars per thousand impressions, these sites will sell right-wing ads for less than a dollar. Similarly you can run much cheaper ads on, say, Breitbart, than you can on the Huffington Post.</p>
+                    <!-- insert ad pic here? -->
+                    <div class="row full-image-wrapper">
+                        <img class="twelve columns" src="../img/targeted-ads/4chan-dashboard-ad.png"/>
+                    </div>
+                    <div class="row">
+                        <div class="two columns">&nbsp;</div>
+                        <div class="image-caption eight columns">The takeaway should <i>not</i> be that it's impossible to run successful campaigns on 4chan. Certainly there's room for improvement in my ads. However ads that cost nine cents per thousand views are cheap for a reason. There is no free lunch.</div>
+                        <div class="two columns"></div>
+                    </div>
 
-<p>You also find competitors often don’t seem to care about conservatives. NetNanny, an internet filter which prides itself on its filter tech and options, only has <a href="https://www.netnanny.com/features/internet-filter/">14 filters</a>, none of which are what conservatives want. Every conservative parent I spoke with had an opinion about pro-trans content, and while I don’t want to debate the morality of the subject it is clear the demand exists.</p>
+                    <p>The most obvious draw is that advertising is way cheaper when you target conservative audiences. At one point I tried running ads on 4chan, which seemed to highlight this difference most acutely. Although prices on the /LGBT/ board do vary, it often costs 1-2 dollars per thousand impressions, while a thousand impressions on the /pol/ board rarely crests 10 cents. Similarly you can run much cheaper ads on, say, Breitbart, than you can on the Huffington Post. While some sites like Gab will force prices to be higher (making advertisers pay thousands just to be allowed to run ads), I've been warned these simply don't convert.</p>
 
-                    <h3>Why isn't this turning into profit?</h3>
+<p>You also find competitors often don’t seem to care about conservatives. NetNanny, an internet filter which prides itself on its filter tech and options, only has <a href="https://www.netnanny.com/features/internet-filter/">14 filters</a>, none of which are what conservatives want. Every socially conservative parent I spoke with had a negative opinion about pro-trans content, and while I don’t want to debate the morality of the filter it is clear talking to parents the demand exists and it is strong. The creators of NetNanny or Qustodio must be aware of the demand for trans filters, they simply choose not to include them for other business reasons.</p>
 
-<p>One of the most interesting things I found speaking with conservatives is a strong distrust of almost all cloud based tech companies. This isn’t coming from grandpa with a landline; this is coming from young parents who have read about online censorship from Google or social media companies, and no longer trust them.</p>
+<p>Lastly conservatives just sound like an underserved market, in the same way tech for farmers sounds like an underserved market. There are massive (arguable far)-left cities full of software developers. Intuitively one would assume more tech ideas for the left have been explored, since there are more left-wing developers. Why shouldn't it be easier to market to consumers on the right? </p>
 
-<p>This is a very common, core belief I’ve found among parents, with political views ranging from independent to strongly right-wing. They often assume services or ads coming from companies are being run by people who hate them, and so they participate as little as possible. Unfortunately this has the effect of making it very difficult to reach conservatives. Platforms like Gab simply do not possess the technical infrastructure to deliver targeted ads. In fact, as you get down to it, actual purchase rates on conservative sites can often be more expensive than on a more feature rich but mainstream advertiser (like Google).</p>
+                    <h3>Why is this hard to turn into profit?</h3>
 
-<p>This also explains why companies haven’t been able to exploit what appear to be cheap ad costs on conservative sites. Casper and Blue Apron (briefly) became multi-billion dollar companies by finding cheap ads and using them to sell their product. Due to the lack of infrastructure and cultural tendencies of conservatives, I don’t think this could be repeated on most conservative tech sites.</p> 
+<p>One of the most interesting things I found speaking with conservatives is a strong distrust of almost all cloud based tech companies. This isn’t coming from Grandpa with a landline; this is coming from young parents who have read about online censorship from Google or social media companies, and no longer trust them.</p>
 
-<h3>What can be done?</h3>
+<p>This is a very common, core belief I’ve found among parents, with political views ranging from independent to strongly right-wing. They often assume services or ads coming from companies are being run by people who hate them, and so they participate as little as possible. Unfortunately this has the effect of making it very difficult to reach conservatives. Platforms like Truth Social or 4chan simply do not possess the technical infrastructure to deliver targeted ads. In fact, as you get down to it, actual purchase rates on conservative sites can be more expensive than on a more feature rich but mainstream advertiser (like Google), due to low click through rates.</p>
 
-<p>There is a certain irony in this post, because I haven’t found a solution for my product. <a href="https://www.parentcontrols.win/">Parent Controls Win</a> has continued to struggle to find customers, however there are certainly some lessons.<p>
+<p>This also explains why companies haven’t been able to exploit what appear to be cheap ad costs on conservative sites. Casper and Blue Apron (briefly) became billion dollar companies by finding cheap ads and using them to sell their product, until prices stabilized. Logically one would think there should be other undervalued ad prices, however due to the lack of infrastructure and cultural tendencies of conservatives, I don’t think this could be repeated for conservative in the same way. Conservatives simply aren't as open to new tech products, and the ad platforms on conservative sites lack features.</p> 
 
-<p>By far the most important thing I learned was that fundamental product design should change. Conservatives don’t like subscriptions, they don’t like uploading data to the cloud, and they don’t like accounts. I have watched a friend of mine set up a new Windows computer while clicking “allow” to all of the privacy questions because she just wanted to make Microsoft happy. A conservative consumer would never do that. There is an inherent distrust in the system, seemingly stemming from the idea that tech products are built by lefty engineers who have been indoctrinated by universities and their peers. I spoke with plumbers and welders with no technical training run linux at home purely out of distrust for Microsoft.</p>
+                    <h3>What can be done?</h3>
 
-<p>It has been said you can only confirm what customers think of your product when you ask them for credit card information. In my case, I found they weren’t excited for a SaaS. The primary issue was not cost or platform support, it was privacy. Conservative parents, and in particular dads, wanted complete control over the offering. They wanted to keep their daughter offline until she was 16 (something I actually heard), and when they do relent it wasn’t going to be under the eye of a new tech company. Incidentally, I think a home server, which ultimately would have cost the consumer more, would have been the way to go. Conservative parents (dads in particular) want to be able to pull a literal plug on the service. They would rather buy and manage a server than trust a tech company.</p> 
+<p>There is a certain irony in this post, because I haven’t found a solution for my product. It's also worth noting that ads on conservative sites or ads targeting conservatives do have a certain click through percentage, it's just lower than that of more left-wing customers. <a href="https://www.parentcontrols.win/">Parent Controls Win</a> has continued to struggle to find customers, however there are certainly some lessons.<p>
 
-<p>So my best advice is this: if you think you may end up with a conservative audience, you need to design your product in such a way that the company itself, is or could be hostile. The product should either be so necessary that they can’t live without it, or it should be set up in a way that even if the company wants to cut someone off as a customer they can’t.</p>
+<p>By far the most important thing I learned was that fundamental product design should change. Conservatives don’t like subscriptions, they don’t like uploading data to the cloud, and they don’t like making accounts. They also just don't like clicking on ads. I have watched an unpolitical friend of mine set up a new Windows computer while clicking “allow” to all of the privacy questions because she just wanted to make Microsoft happy. A conservative consumer would never do that. There is an inherent distrust in the system, seemingly stemming from the idea that tech products are built by lefty engineers who have been indoctrinated by universities and their peers. I spoke with plumbers and welders with no technical training who run linux at home purely out of distrust for Microsoft.</p>
+
+<p>It has been said you can only confirm what customers think of your product when you ask for credit card information. In my case, I found they weren’t excited for a SaaS. The primary issue was not cost or platform support, it was privacy and trust. Conservative parents, and in particular dads, wanted complete control over the offering. In absence of control, they wanted to keep their kids offline until they were 16 (something I actually heard), and if they do compromise it won’t be under the eye of a new tech company. Incidentally, I think a home server, which ultimately would have cost the consumer more in hardware, would be the way to go. Conservative parents (dads in particular) want to be able to pull a literal plug on the service. They would rather buy and manage a server than trust a tech company.</p> 
+
+<p>So my best advice is this: if you think you may end up with a conservative audience, you need to design your product in such a way that the company itself is considered hostile. The product should either be so necessary that they can’t live without it, or it should be set up in a way that even if the company wants to cut someone off as a customer they can’t. Unfortunately this is more difficult and time consuming, so the second option is to find a way to start with left-wing customers.</p>
 
 
 					
