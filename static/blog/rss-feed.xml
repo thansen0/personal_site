@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+    <title>Thomas Hansen's Blog</title>
+    <description>A blog about mostly tech.</description>
+    <link>https://thomashansen.xyz/blog.html</link>
+    <atom:link href="https://thomashansen.xyz/blog/rss-feed.xml" rel="self" type="application/rss+xml" />
+
+    <item>
+        <title>The Trouble Marketing New Software Products to Conservatives</title>
+        <description>Lessons I learned trying to target conservative parents with my company Parent Controls Win</description>
+        <link>https://thomashansen.xyz/blog/targeted-advertising-at-conservatives.html</link>
+        <guid>https://thomashansen.xyz/blog/targeted-advertising-at-conservatives.html</guid>
+        <pubDate>Wed, 09 Oct 2024 12:00:00 GMT</pubDate>
+    </item>
+
+    <item>
+        <title>The Simplest Possible Stripe Subscriptions Setup with Phoenix and stripity-stripe</title>
+        <description>I needed the simplest payment solution I could find which managed subscriptions and integrates into a website; that's what this guide is. Based on Tolc's guide, but prioritizes Stripe Checkout and doesn't require webhooks.</description>
+        <link>https://thomashansen.xyz/blog/phoenix-elixir-stripe-setup.html</link>
+        <guid>https://thomashansen.xyz/blog/phoenix-elixir-stripe-setup.html</guid>
+        <pubDate>Mon, 01 Jan 2024 12:00:00 GMT</pubDate>
+    </item>
+
+    <item>
+        <title>Comparing two American Made Computer Cases</title>
+        <description>American made computer cases are rare, and I now own the only two consumer-oriented ATX compatible cases I'm aware of. So I compared them.</description>
+        <link>https://thomashansen.xyz/blog/us-made-computer-case.html</link>
+        <guid>https://thomashansen.xyz/blog/us-made-computer-case.html</guid>
+        <pubDate>Wed, 01 Nov 2023 12:00:00 GMT</pubDate>
+    </item>
+
+</channel>
+</rss>
