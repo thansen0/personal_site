@@ -7,8 +7,16 @@
     <atom:link href="https://thomashansen.xyz/blog/rss-feed.xml" rel="self" type="application/rss+xml" />
 
     <item>
+        <title>Phosphorus, Oolitic deposits, and Chinese Made Cast Iron Cookware</title>
+        <description>Why it can make sense to seek out and buy American made cast iron cookware, beyond patriotism.</description>
+        <link>https://thomashansen.xyz/blog/american-made-cast-iron.html</link>
+        <guid>https://thomashansen.xyz/blog/american-made-cast-iron.html</guid>
+        <pubDate>Wed, 19 Oct 2024 12:00:00 GMT</pubDate>
+    </item>
+
+    <item>
         <title>The Trouble Marketing New Software Products to Conservatives</title>
-        <description>Lessons I learned trying to target conservative parents with my company Parent Controls Win</description>
+        <description>Lessons I learned trying to target conservative parents with my company Parent Controls Win.</description>
         <link>https://thomashansen.xyz/blog/targeted-advertising-at-conservatives.html</link>
         <guid>https://thomashansen.xyz/blog/targeted-advertising-at-conservatives.html</guid>
         <pubDate>Wed, 09 Oct 2024 12:00:00 GMT</pubDate>
