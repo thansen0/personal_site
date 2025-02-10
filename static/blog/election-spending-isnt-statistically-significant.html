@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Thomas Hansen - Developer, Engineer</title>
+  <meta name="author" content="Thomas Hansen">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="../css/normalize.css">
+  <link rel="stylesheet" href="../css/skeleton.css">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <!-- Open Graph meta tags -->
+  <meta property="og:title" content="Elections spending isn’t statistically significant; p-value 0.619">
+  <meta property="og:description" content="How closely tied to election results is campaign spending, if at all?">
+  <meta property="og:image" content="https://thomashansen.xyz/img/election/election-spending.png">
+  <meta property="og:type" content="article">
+
+  <!-- Twitter Card meta tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Elections spending isn’t statistically significant; p-value 0.619">
+  <meta name="twitter:description" content="How closely tied to election results is campaign spending, if at all?">
+  <meta name="twitter:image" content="https://thomashansen.xyz/img/election/election-spending.png">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="../img/favicon.ico">
+
+    <!-- Syntax Highlighter
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github.min.css">
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
+	
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119980505-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-119980505-1');
+	</script>
+
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="e86ce71b-65cf-4db5-a47a-143eca33e328"></script>
+
+    <script>hljs.highlightAll();</script>
+
+</head>
+<body>
+	
+	<!--  Title content of site  -->
+	<div class="container">
+		<div class="row">
+			<div class="content-page-header ten columns">
+				<h1>Elections spending isn’t statistically significant; p-value 0.619</h1>
+				<h6>Thomas Hansen</h6>
+			</div>
+		</div>
+		
+		<!--	Story content	-->
+		<div class="content-wrapper">
+			<div class="row content-body">
+				<div class="twelve columns reading-content-style">
+
+                    <div class="row full-image-wrapper">
+                        <img class="twelve columns" src="../img/election/election-spending.png"/>
+                    </div>
+                    <div class="row">
+                        <div class="two columns">&nbsp;</div>
+                        <div class="image-caption eight columns">All data available in the <a href="https://github.com/thansen0/election-p-value/blob/master/election.ipynb">ipynb file</a></div>
+                        <div class="two columns"></div>
+                    </div>
+					
+                    <p>I’ll be the first to admit, I’ve massaged the data. There are simply not enough data points to produce good averages, and I’ve made assumptions, such as the normality of data. I started at the 2000 election, however really 2008 is when modern campaign finance began. We also have to work around the fact the data isn’t independent, or that campaign spending laws may change in ways I can’t account for (such as the McCain–Feingold Act of 2002).</p>
+
+                    <p>That said, we have seen election spending seemingly have very little impact on elections. The last three elections were won by the candidate with the least money, with the winner being outspent by hundreds of millions.</p>
+
+                    <h3>But first: what is a p-value?</h3>
+
+                    <p>As you may not recall from your high school stats class, a p-value is the likelihood something isn’t random. When it’s not random, we call it statistically significant. That something, is what we call the null hypothesis (H_0) and the alternative hypothesis (H_1). A p-value < 0.05 means the alternative hypothesis is statistically significant, and a p-value < 0.01 is highly statistically significant.</p>
+                    
+                    <p>Conversely, a p-value > 0.95 suggests statistical significance in favor of the null hypothesis, and p-value > 0.99 is highly statistically significant. When looking at election data and comparing it against funding, I came up with these hypotheses:</p>
+
+                    <ul>
+                      <li><b>H_0</b>: There is no relationship between campaign funding and winning</li>
+                      <li><b>H_1</b>: There is a relationship between campaign funding and winning</li>
+                    </ul>
+
+                    <p>I will use these for all of the statistical tests.</p>
+
+                    <h3>Point-Biserial Correlation</h3>
+
+                    <p>A point-biserial correlation test is a good way to compare a continuous variable (in the case campaign spending) with a binary, or dichotomous, variable (which will be winning or losing the election). The continuous variable additionally must be on an interval scale, meaning there is no true 0, and since we’re taking the difference in spending between each party this is the case.</p>
+
+                    <p>Additionally the spending differences should have similar variances between elections, and they should approximate a normal distribution. Although we have limited data points, I believe this to be the case, and I’ve adjusted spending for inflation to aid in this.</p>
+                    
+                    <div class="row full-image-wrapper">
+                      <img class="twelve columns" src="../img/election/election-spending-inflation.png"/>
+                    </div>
+                    <div class="row">
+                        <div class="two columns">&nbsp;</div>
+                        <div class="image-caption eight columns">Election spending, adjusted for inflation</div>
+                        <div class="two columns"></div>
+                    </div>
+
+                    <p>What is an issue, however, is independence. While one election is not directly dependent on another, it would be far fetched to claim they’re independent. I’m sure republicans spent less on McCain in 2012 than Romney in 2008 as a deliberate move, since candidates generally have momentum through to their second term. I also don’t have a very big sample size (ideally n>=20). These are things we’ll just have to live with, as there is no perfect test.</p>
+
+                    <p>Calculating a point-biserial test in python is quite simple; as it can be done in one line once you’ve organized the data.</p>
+
+                    <pre><code>from scipy.stats import pointbiserialr
+r, p_value = pointbiserialr(elfd['spend_diff'], elfd['Democrat_act_win'])</code></pre>
+
+                    <div class="row full-image-wrapper">
+                      <img class="twelve columns" src="../img/election/pointbires.png"/>
+                    </div>
+                    <div class="row">
+                        <div class="two columns">&nbsp;</div>
+                        <div class="image-caption eight columns">Code snipped from <a href="https://github.com/thansen0/election-p-value/blob/master/election.ipynb">git repo</a></div>
+                        <div class="two columns"></div>
+                    </div>
+
+                    <p>What we see is pretty striking, but not surprising. The p-value suggests no statistical significance. The r and r^2 values similarly suggest weak correlations, but given the small sample size and p-value this could easily be interpreted as no correlation.</p>
+
+                    <p>For context, r-values can generally be interpreted as such:</p>
+
+                    <ul>
+                      <li>r = 0.1 to 0.3 might suggest a weak correlation.</li>
+                      <li>r = 0.3 to 0.7 could be interpreted as a moderate correlation.</li>
+                      <li>r = 0.7 to 1.0 would indicate a strong correlation.</li>
+                    </ul>
+
+                    <p>Negative values are allowed, and they indicate a negative correlation.</p>
+
+                    <h3>Spearman Correlation Coefficient</h3>
+
+                    <p>The Spearman test stands out from our biserial test by not requiring normalized data or linearity, which arguably makes it more accurate. It also takes in two continuous variables, allowing us to compare our spending difference against electoral votes. The electoral vote difference isn’t interval scale, however in the spearman test that’s ok.</p>
+
+                    <p>As expected, we again see essentially no correlation. While our p-value is technically slightly higher (at 0.787), it’s not statistically significant and I would suspect it’s overfitting.</p>
+
+                    <h3>What can we learn from this?</h3>
+
+                    <p>Frankly, we can learn very little, the sample size simply isn’t big enough. While I could go before 2000, I didn’t want to, as I’m afraid elections were too different before then (and the data becomes increasingly sparse).</p>
+
+                    <p>My finding does agree with other research though, and it makes intuitive sense. Money doesn’t vote, people do, and people often vote for the issues they experience in their everyday lives. In 1980, Jimmy Carter let inflation get to 14%, and in the 1980 November election Ronald Reagan won with 489 electoral votes. In my opinion, no amount of campaign spending was going to get around 14% inflation.</p>
+
+                    <p>Similarly, in the 2016 election, we saw Russia spend tens of millions on the US election; researchers later determined it had <a href="https://www.nyu.edu/about/news-publications/news/2023/january/exposure-to-russian-twitter-campaigns-in-2016-presidential-race-.html">"no measurable changes in attitudes, polarization, or voting behavior"</a>.</p>
+
+                    <p>While I wouldn’t go so far as to say it doesn’t matter, I do think it’s reasonable to conclude that election spending on the US presidential race has very little impact on election results.</p>
+
+				</div>
+			</div>
+			<div class="row content-footer">
+				<div class="content-footer-dates">02-10-2025</div>
+			</div>
+		</div>
+	
+		<!--	Blog link	-->
+		<div class="content-wrapper">
+			<div class="row content-center-button">
+				<a href="../blog.html" class="button">Article List</a>
+			</div>
+		</div>
+		
+	</div>
+	
+	<!--  footer  -->
+	<div class="container footer-container">
+		<div class="footer-wrapper">
+			<div class="row">
+				<div class="three columns">&nbsp;
+				</div>
+				<div class="six columns">
+					<div class="footer-line">Thomas Hansen</div>
+					<div class="footer-line">Please contact me at <a href="mailto:contact@thomashansen.xyz">contact@thomashansen.xyz</a> if you have any questions or want to get in contact with me.</div>
+					<div class="footer-copyright">Copyright 2025</div>
+				</div>
+				<div class="three columns">&nbsp;
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
