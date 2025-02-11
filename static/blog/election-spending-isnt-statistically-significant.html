@@ -23,14 +23,14 @@
   <link rel="stylesheet" href="../css/style.css">
 
   <!-- Open Graph meta tags -->
-  <meta property="og:title" content="Elections spending isn’t statistically significant; p-value 0.619">
+  <meta property="og:title" content="Elections spending isn’t statistically significant; p-value 0.174">
   <meta property="og:description" content="How closely tied to election results is campaign spending, if at all?">
   <meta property="og:image" content="https://thomashansen.xyz/img/election/election-spending.png">
   <meta property="og:type" content="article">
 
   <!-- Twitter Card meta tags -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Elections spending isn’t statistically significant; p-value 0.619">
+  <meta name="twitter:title" content="Elections spending isn’t statistically significant; p-value 0.174">
   <meta name="twitter:description" content="How closely tied to election results is campaign spending, if at all?">
   <meta name="twitter:image" content="https://thomashansen.xyz/img/election/election-spending.png">
 
@@ -65,7 +65,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="content-page-header ten columns">
-				<h1>Elections spending isn’t statistically significant; p-value 0.619</h1>
+				<h1>Elections spending isn’t statistically significant; p-value 0.174</h1>
 				<h6>Thomas Hansen</h6>
 			</div>
 		</div>
@@ -132,7 +132,7 @@ r, p_value = pointbiserialr(elfd['spend_diff'], elfd['Democrat_act_win'])</code>
                         <div class="two columns"></div>
                     </div>
 
-                    <p>What we see is pretty striking, but not surprising. The p-value suggests no statistical significance. The r and r^2 values similarly suggest weak correlations, but given the small sample size and p-value this could easily be interpreted as no correlation.</p>
+                    <p>What we see is pretty striking, but not surprising. The p-value suggests no statistical significance. The r and r^2 values similarly suggest weak correlations, but given the small sample size and p-value this could easily be interpreted as no correlation. Excluding the Bush elections gives us a p-value of 0.62, while all elections back to 2000 gives us a p-value of 0.174 (used in the title).</p>
 
                     <p>For context, r-values can generally be interpreted as such:</p>
 
@@ -148,7 +148,16 @@ r, p_value = pointbiserialr(elfd['spend_diff'], elfd['Democrat_act_win'])</code>
 
                     <p>The Spearman test stands out from our biserial test by not requiring normalized data or linearity, which arguably makes it more accurate. It also takes in two continuous variables, allowing us to compare our spending difference against electoral votes. The electoral vote difference isn’t interval scale, however in the spearman test that’s ok.</p>
 
-                    <p>As expected, we again see essentially no correlation. While our p-value is technically slightly higher (at 0.787), it’s not statistically significant and I would suspect it’s overfitting.</p>
+                    <p>As expected, we again see essentially no correlation. While our p-value is technically slightly higher (at 0.482), it’s not statistically significant and I would suspect it’s overfitting.</p>
+
+                    <div class="row full-image-wrapper">
+                      <img class="twelve columns" src="../img/election/spearman-data.png"/>
+                    </div>
+                    <div class="row">
+                        <div class="two columns">&nbsp;</div>
+                        <div class="image-caption eight columns">Code snipped from <a href="https://github.com/thansen0/election-p-value/blob/master/election.ipynb">git repo</a></div>
+                        <div class="two columns"></div>
+                    </div>
 
                     <h3>What can we learn from this?</h3>
 
