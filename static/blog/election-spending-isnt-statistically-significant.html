@@ -90,7 +90,7 @@
 
                     <h3>But first: what is a p-value?</h3>
 
-                    <p>As you may not recall from your high school stats class, a p-value is the likelihood something isn’t random. When it’s not random, we call it statistically significant. That something, is what we call the null hypothesis (H_0) and the alternative hypothesis (H_1). A p-value < 0.05 means the alternative hypothesis is statistically significant, and a p-value < 0.01 is highly statistically significant.</p>
+                    <p>As you may not recall from your high school stats class, a p-value is the likelihood of observing data which is at least as extreme as what was observed. When our p-value is low, we call it statistically significant. Our data is being compared against the null hypothesis (H_0), which is assumed true, and the alternative hypothesis (H_1). A p-value < 0.05 means our data is statistically significant, meaning our results "extreme" if H_0 is true; a p-value < 0.01 is highly statistically significant.</p>
                     
                     <p>Conversely, a p-value > 0.95 suggests statistical significance in favor of the null hypothesis, and p-value > 0.99 is highly statistically significant. When looking at election data and comparing it against funding, I came up with these hypotheses:</p>
 
@@ -103,7 +103,7 @@
 
                     <h3>Point-Biserial Correlation</h3>
 
-                    <p>A point-biserial correlation test is a good way to compare a continuous variable (in the case campaign spending) with a binary, or dichotomous, variable (which will be winning or losing the election). The continuous variable additionally must be on an interval scale, meaning there is no true 0, and since we’re taking the difference in spending between each party this is the case.</p>
+                    <p>A point-biserial correlation test is a good way to compare a continuous variable (in the case campaign spending) with a binary, or dichotomous, variable (which will be winning or losing the election). The continuous variable additionally must be on an interval scale, meaning the 0 point is arbitrary, and since we’re taking the difference in spending between each party (each ratio-scale) this is the case.</p>
 
                     <p>Additionally the spending differences should have similar variances between elections, and they should approximate a normal distribution. Although we have limited data points, I believe this to be the case, and I’ve adjusted spending for inflation to aid in this.</p>
                     
