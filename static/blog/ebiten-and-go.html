@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Thomas Hansen - Developer, Engineer</title>
+  <meta name="author" content="Thomas Hansen">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="../css/normalize.css">
+  <link rel="stylesheet" href="../css/skeleton.css">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <!-- Twitter Card meta tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Problem with building games with Ebiten and Go">
+  <meta name="twitter:description" content="My findings trying to write a highly parallelized game in Go.">
+  <meta name="twitter:image" content="https://thomashansen.xyz/img/ebiten-engine/ChannelLogic.jpg">
+
+  <!-- Open Graph meta tags -->
+  <meta property="og:title" content="The Problem with building games with Ebiten and Go">
+  <meta property="og:description" content="My findings trying to write a highly parallelized game in Go.">
+  <meta property="og:image" content="https://thomashansen.xyz/img/ebiten-engine/ChannelLogic.jpg">
+  <meta property="og:type" content="article">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="../img/favicon.ico">
+
+    <!-- Syntax Highlighter
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github.min.css">
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
+	
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119980505-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-119980505-1');
+	</script>
+
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="e86ce71b-65cf-4db5-a47a-143eca33e328"></script>
+
+    <script>hljs.highlightAll();</script>
+
+</head>
+<body>
+	
+	<!--  Title content of site  -->
+	<div class="container">
+		<div class="row">
+			<div class="content-page-header ten columns">
+				<h1>The Problem with building games with Ebiten and Go</h1>
+				<h6>Thomas Hansen</h6>
+			</div>
+		</div>
+		
+		<!--	Story content	-->
+		<div class="content-wrapper">
+			<div class="row content-body">
+				<div class="twelve columns reading-content-style">
+
+                    <p>Ebiten is a 2D game engine written entirely in Go, and it’s a lot of fun. As a way for Go engineers to have fun building games, Ebiten is great.</p>
+
+                    <p>The issues arise in the engine motivation and implementation. Go is a unique language which encourages highly parallel applications with low overhead. In college, I used a 256 core Xeon Phi processor to test different multithreading libraries and languages and found Go to be a top performer. Goroutines are a powerful tool which distinguish the language from a sea of similar languages.</p>
+
+                    <p>The issue is Ebiten doesn’t, and arguably can’t, take meaningful advantage of this feature. Ebiten features often aren’t thread-safe, and recommended game design doesn’t encourage the use of Goroutines. Further, 2D games often lack the computational requirements to justify a goroutine, which results in the benefits of the language not shining through.</p>
+
+                    <h2>My (Simple) Go Game</h2>
+
+                    <p>My ultimate goal was to write a game that made my CPU go burrr. It’s a childish desire but there’s something fun about using every ounce of compute I can muster to perform a task.</p>
+
+                    <p>A mass enemy FPS game, where enemies multiply as you kill them, seemed like the way to go. Using a Go interface I could make hot-swappable enemy logic, starting with a simple follow algorithm with the plan of moving to real-time reinforcement learning algorithm.</p>
+
+                    <h2>Game Structure</h2>
+
+                    <p>Ebiten games have two recurring functions; Update and Draw, which do exactly what you expect. These are called at a set ticks per second (TPS), which slows as your machine becomes overloaded.</p>
+
+                    <p>Games are initialized, and usually data is stored in a game struct, which holds pointers to other entities or features of the game. The Update function updates the struct data, and the Draw function writes to the screen.</p>
+
+                    <h3>Draw Function</h3>
+
+                    <p>One of the issues is the <code>ebiten.DrawImageOptions{}</code> <i>isn’t thread safe</i>, along with the <code>DrawImage</code> function. DrawImageOptions is a struct which should be reset after each draw. Creating a new one every time you draw causes excessive memory writes, while using it in goroutines leads to write collisions.</p>
+
+                    <p>DrawImage suffers from a similar fate, as it primarily writes to the options struct and then calls DrawRectShader which writes to the screen through the GPU. This operation again isn’t thread safe, and although you can do preprocessing in goroutines you can’t actually write to the screen in a multithreaded fashion.</p>
+
+                    <h3>Update Function</h3>
+
+                    <p>The update function doesn’t suffer from the same single-thread limitations as Draw, however it deals with a 2D limitation which is the logic often isn’t that complex.</p>
+
+                    <p>Take my mass-enemy FPS game. For each enemy, I check against a list of projectiles to see if they collide. There are a few hundred projectile collisions to compare, plus potentially hundreds of thousands of enemies, creating a fun O(n^2) problem to chew through with goroutines.</p>
+
+                    <p>I tried solving this in two fashions; the first was spinning off a goroutine for each projectile and comparing it against each enemy position in a slice. This had the benefit of adding more logic into each goroutine, however had the disadvantage of not producing a goroutine based design. Calls had to be wrapped up quickly so the slice could be read from or modified again. Although there was no cap on the size of the slice, append calls required allocation and garbage collection. Ultimately this method only allowed ~100k enemies on the screen, and only had about 30% CPU utilization on my Intel 12700.</p>
+
+                    <p>The second fashion was using an even/odd channel architecture. I would start in the Update function with all the enemies in the even channel, pop it off to perform projectile calculations, and then insert it onto the odd channel. Once this was complete I’d move to the Draw function where I’d pop the enemy off the odd channel, Draw it onto the screen, and then write it to the even channel. Unfortunately even though the Draw step can’t be done with goroutines I still have to go through the overhead of using channels, and once you consider the memory write issues it’s slower than spinning off independent threads. I could only run about 60k enemies without seeing a framerate reduction and I only hit ~20% CPU utilization across all cores.</p>
+
+                    <div class="row full-image-wrapper">
+                        <img class="ten columns" src="../img/ebiten-engine/ChannelLogic.jpg"/>
+                    </div>
+                    <div class="row">
+                        <div class="two columns">&nbsp;</div>
+                        <div class="image-caption eight columns">My (not so clever) attempt at improving thread utilization; I actually made it worse.</div>
+                        <div class="two columns"></div>
+                    </div>
+          
+                    <p>The real kicker is if I don’t use any goroutines at all, I get the same 100k capability, just hitting one CPU core at 100%.</p>
+
+                    <h2>Ebiten itself</h2>
+
+                    <p>The question must be asked: if it’s hard to add goroutines and channels to game logic, maybe the value add is in the engine itself. This doesn’t hold up when we look at the engine.</p>
+
+                    <p>Ebitenutil doesn’t use go routines or channels at all. The internal logic library uses some, but the use is sparing and isolated mostly to rendering. Although I haven’t gone very in depth in the engine logic, my cursory review suggests there’s no meaningful performance benefit to them, nor is the implementation unique to Go.</p>
+
+                    <h2>Conclusion</h2>
+
+                    <p>Ultimately the limited threadsafe architecture of the engine combined with the logic limitations of 2D games makes it hard to justify this Go based game engine. I don’t want to criticize the impressive work done by the Ebiten team, or tell someone they can’t have fun, but this is fundamentally a toy engine.</p>
+
+                    <p>Although I’m sure a game could be conceived which benefits strongly from Go, the language benefits don’t propagate themselves to the average game. The overhead from goroutines and excess writes slow down what should be a relatively fast TPS/FPS, and any non-hobby developer should consider a more appropriate language and engine.</p>
+
+                    <h3>Afterward</h3>
+
+                    <p>If anyone is curious, the game I wrote is here, called <a href="https://github.com/thansen0/rl-simple-game" target="_blank">rl-simple-game</a> as of May 2025. Despite its name, the reinforcement learning isn't implemented, as I got sidetracked hitting performance bottlenecks. The branch my comparisons were done on is called <a href="https://github.com/thansen0/rl-simple-game/tree/threading-test" target="_blank">threading-test</a>.</p>
+
+					
+				</div>
+			</div>
+			<div class="row content-footer">
+				<div class="content-footer-dates">05-11-2025</div>
+			</div>
+		</div>
+	
+		<!--	Blog link	-->
+		<div class="content-wrapper">
+			<div class="row content-center-button">
+				<a href="../blog.html" class="button">Article List</a>
+			</div>
+		</div>
+		
+	</div>
+	
+	<!--  footer  -->
+	<div class="container footer-container">
+		<div class="footer-wrapper">
+			<div class="row">
+				<div class="three columns">&nbsp;
+				</div>
+				<div class="six columns">
+					<div class="footer-line">Thomas Hansen</div>
+					<div class="footer-line">Please contact me at <a href="mailto:contact@thomashansen.xyz">contact@thomashansen.xyz</a> if you have any questions or just want to chat.</div>
+					<div class="footer-copyright">Copyright 2025</div>
+				</div>
+				<div class="three columns">&nbsp;
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

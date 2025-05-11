@@ -7,6 +7,14 @@
     <atom:link href="https://thomashansen.xyz/blog/rss-feed.xml" rel="self" type="application/rss+xml" />
 
     <item>
+        <title>The Problem with building games with Ebiten and Go</title>
+        <description>My findings trying to write a highly parallelized game in Go.</description>
+        <link>https://thomashansen.xyz/blog/ebiten-and-go.html</link>
+        <guid>https://thomashansen.xyz/blog/ebiten-and-go.html</guid>
+        <pubDate>Sun, 11 May 2025 12:00:00 GMT</pubDate>
+    </item>
+
+    <item>
         <title>Elections spending isn’t statistically significant; p-value 0.174</title>
         <description>How closely tied to election results is campaign spending, if at all?</description>
         <link>https://thomashansen.xyz/blog/election-spending-isnt-statistically-significant.html</link>
