@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Thomas Hansen - Developer, Engineer</title>
+  <meta name="author" content="Thomas Hansen">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="../css/normalize.css">
+  <link rel="stylesheet" href="../css/skeleton.css">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <!-- Twitter Card meta tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Problem with building games with Ebiten and Go">
+  <meta name="twitter:description" content="My findings trying to write a highly parallelized game in Go.">
+  <meta name="twitter:image" content="https://thomashansen.xyz/img/ebiten-engine/ChannelLogic.jpg">
+
+  <!-- Open Graph meta tags -->
+  <meta property="og:title" content="The Problem with building games with Ebiten and Go">
+  <meta property="og:description" content="My findings trying to write a highly parallelized game in Go.">
+  <meta property="og:image" content="https://thomashansen.xyz/img/ebiten-engine/ChannelLogic.jpg">
+  <meta property="og:type" content="article">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="../img/favicon.ico">
+
+    <!-- Syntax Highlighter
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github.min.css">
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
+	
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119980505-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-119980505-1');
+	</script>
+
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="e86ce71b-65cf-4db5-a47a-143eca33e328"></script>
+
+    <script>hljs.highlightAll();</script>
+
+</head>
+<body>
+	
+	<!--  Title content of site  -->
+	<div class="container">
+		<div class="row">
+			<div class="content-page-header ten columns">
+				<h1>The State of Exceptions in C++</h1>
+				<h6>Thomas Hansen</h6>
+			</div>
+		</div>
+		
+		<!--	Story content	-->
+		<div class="content-wrapper">
+			<div class="row content-body">
+				<div class="twelve columns reading-content-style">
+
+                <h6>
+                <code>throws std::out_of_bounds(“This error type may have reached the end of its usable range”);</code>
+                </h6>
+
+                <p>Exceptions work through a relatively clever mechanism, making them unique among the languages that include them. Instead of just modifying a variable or switching between two addresses in memory, they “unwind the stack”, propagating the error upward until it is handled or the program terminates.</p>
+
+                <p>Each function stores its variables and state information on the stack, typically starting at a higher memory address and allocating each function on a lower address. Once an exception is thrown, it escalates upward through each frame pointer on the stack, cleaning up resources through RAII and dismantling stack frames. Eventually, the exception is caught, or if unhandled it reaches the main function and triggers the <code>terminate()</code> syscall. Below is an example showing how this works:</p>
+
+                <pre><code class="language-cpp">
+#include <stdio.h>
+#include <stdexcept>
+
+void foo() {
+int a{0}; // memory address on stack
+printf("%p\n", &a);
+
+throw std::runtime_error("Our exception");
+}
+
+int main() {
+int a{0}; // memory address on stack
+printf("%p\n", &a);
+
+foo();
+
+printf("Never prints\n");
+}
+                </code></pre>
+
+                <pre><code class="language-bash">
+0x7ffcdc530734
+0x7ffcdc530704
+terminate called after throwing an instance of 'std::runtime_error'
+what():  Our exception
+Aborted (core dumped)
+                </code></pre>
+
+                <p>This mechanism has many advantages. The call stack can help in debugging, allowing the developer to see which functions are involved in the call stack with an error, and it makes error handling simpler for the developer of the library to incorporate.</p>
+
+                <p>In a tour of C++20 on page 45, the creator of C++ Bjarne Stroustrup encouraged their use, writing:</p>
+
+                <blockquote>
+                <p>"Use of the exception-handling mechanisms can make error handling simpler, more systematic, and more readable"</p>
+                </blockquote>
+
+                <p>So they are an interesting feature, which add an interesting and new paradigm to the library that many people like. So why write this article?</p>
+
+                <h3>Dissent</h3>
+
+                <p>We can start by looking at the Google C++ coding guide and best practices. While it’s not without its controversy, Google is big enough and the guide is popular enough that it can’t be ignored. <a href=”https://google.github.io/styleguide/cppguide.html#Exceptions”>In it, they succinctly state</a>:</p>
+
+                <blockquote>
+                <p>"We do not use C++ exceptions."</p>
+                </blockquote>
+
+                <p>And go on to describe situations where they produce dangerous code. In particular, since exceptions can easily take down your program, they must be caught and taken seriously. When third party libraries add exceptions, it can be easy to not update the code properly, and they may crash your program in ways you couldn’t appropriately plan for.</p>
+
+                <p>Modern system languages have taken a stance against exceptions. Golang and Rust don’t incorporate exceptions at all. Languages who have built their reputation on fault tolerance like Elixir have refused to add them as well, relying on strict error handling instead.</p>
+
+                <p>Even Stroustrup, who’s not opposed to exceptions, has been implementing alternatives into C++. C++17 saw the introduction of the <code>optional&lt;T&gt;</code> type, making it easier to let the caller know a certain return value doesn’t exist. In C++23, we’re seeing the introduction of <code>std::expected&lt;T, E&gt;</code>, which allows for a return type and an error type, similar to what we see in many other languages like Rust and Swift, and intellectually similar to what we see in Go. </p>
+
+                <p>So why the move away from exceptions? I think it has to do with shifting needs in industry. Although exceptions are nice to use while building libraries, they make it easier to produce code which could fail unexpectedly. In deployed, containerized environments can mitigate this risk, but if you’re running on modern hardware in a fault tolerant system it often makes more sense to use a faster development language like python. If your Django site or FastAPI instance encounters a critical issue it may be better to “fail fast” and restart the container, instead of attempting to recover. If you’re building your software in C++ you’re possibly in an environment where there isn’t so much overhead; either it’s an embedded device, or performance is critical, and you may not have the overhead to containerize your workflow or restart a device running in the field.</p>
+
+                <p>In my personal experience I’ve done a lot of work on satellites, and restarting a satellite due to an exception could mean missing a communication pass or the satellite tumbling, both of which put you on a course to losing a satellite and the years of work that went into it. This risk is unacceptable, which is why C++ based frameworks like NASA F` (F Prime) explicitly ban exceptions.</p>
+
+                <p>Outside of the embedded or satellite world is where I see disagreement. A U of New Mexico professor I spoke to once referred to exceptions as “the hot new thing”, but in his professional experience didn’t involve building satellites. He taught a class on Java and did research, both of which have a high tolerance for runtime errors.</p>
+
+                <p>While there’s always a discussion to be had, I think the use of exceptions  in modern C++ is limited if ever acceptable. The risk of a new library update taking down a project or a developer poorly implementing exception catching is too great. A project which can tolerate the safety risks exceptions impose may be better off using a language with faster development times and a system architecture with a stronger “let it fail” mentality.</p>
+
+				</div>
+			</div>
+			<div class="row content-footer">
+				<div class="content-footer-dates">11-02-2025</div>
+			</div>
+		</div>
+	
+		<!--	Blog link	-->
+		<div class="content-wrapper">
+			<div class="row content-center-button">
+				<a href="../blog.html" class="button">Article List</a>
+			</div>
+		</div>
+		
+	</div>
+	
+	<!--  footer  -->
+	<div class="container footer-container">
+		<div class="footer-wrapper">
+			<div class="row">
+				<div class="three columns">&nbsp;
+				</div>
+				<div class="six columns">
+					<div class="footer-line">Thomas Hansen</div>
+					<div class="footer-line">Feel free to contact me at <a href="mailto:contact@thomashansen.xyz">contact@thomashansen.xyz</a> or <a href="https://x.com/mongocompass">@mongocompass</a>.</div>
+					<div class="footer-copyright">Copyright 2025</div>
+				</div>
+				<div class="three columns">&nbsp;
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
