@@ -131,7 +131,7 @@ Aborted (core dumped)
 
                 <p>And go on to describe situations where they produce dangerous code. In particular, since exceptions can easily take down your program, they must be caught and taken seriously. When third party libraries add exceptions, it can be easy to not update the code properly, and they may crash your program in ways you couldn’t appropriately plan for.</p>
 
-                <p>Modern system languages have taken a stance against exceptions. Golang and Rust do not incorporate exceptions at all. Languages who have built their reputation on fault tolerance like Elixir have refused to add them as well, relying on strict error handling instead.</p>
+                <p>Modern system languages have taken a stance against exceptions. Golang, Zig, and Rust do not incorporate exceptions at all. Languages who have built their reputation on fault tolerance like Elixir have refused to add them as well, relying on strict error handling instead.</p>
 
                 <p>Even Stroustrup, who’s not opposed to exceptions, has been implementing alternatives into C++. C++17 saw the introduction of the <code>optional&lt;T&gt;</code> type, making it easier to let the caller know a certain return value doesn’t exist. In C++23, we’re seeing the introduction of <code>std::expected&lt;T, E&gt;</code>, which allows for a return type and an error type, similar to what we see in many other languages like Rust and Swift, and intellectually similar to what we see in Go. </p>
 
