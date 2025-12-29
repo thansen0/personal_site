@@ -7,7 +7,7 @@
     <atom:link href="https://thomashansen.xyz/blog/rss-feed.xml" rel="self" type="application/rss+xml" />
 
     <item>
-        <title>The State of Exceptions in C+</title>
+        <title>The State of Exceptions in C++</title>
         <description>Looking at the industry direction of exceptions and whether they still make sense.</description>
         <link>https://thomashansen.xyz/blog/exceptions-in-c++.html</link>
         <guid>https://thomashansen.xyz/blog/exceptions-in-c++.html</guid>
