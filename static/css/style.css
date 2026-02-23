@@ -23,6 +23,16 @@ html {
 	background-color: #fefefe;
 }
 
+/* generic helper */
+
+.paragraph-sizing {
+	font-size: 1.3em;
+}
+
+.indent-content {
+	margin-left: 4em;
+}
+
 .notable {
 	color: #cc6600;
 }

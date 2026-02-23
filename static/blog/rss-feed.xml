@@ -7,6 +7,14 @@
     <atom:link href="https://thomashansen.xyz/blog/rss-feed.xml" rel="self" type="application/rss+xml" />
 
     <item>
+        <title>Lessons learned selling low-cost ebooks</title>
+        <description>Lessons I learned dealing with customers while distributing ebooks for free or low cost, early on in the marketplace ecosystem.</description>
+        <link>https://thomashansen.xyz/blog/lessons-learned-selling-epubs.html</link>
+        <guid>https://thomashansen.xyz/blog/lessons-learned-selling-epubs.html</guid>
+        <pubDate>Sun, 22 Feb 2026 12:00:00 GMT</pubDate>
+    </item>
+
+    <item>
         <title>The State of Exceptions in C++</title>
         <description>Looking at the industry direction of exceptions and whether they still make sense.</description>
         <link>https://thomashansen.xyz/blog/exceptions-in-c++.html</link>
